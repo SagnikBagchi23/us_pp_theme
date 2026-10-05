@@ -1,0 +1,1037 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bond Gradient Tester</title>
+<link rel="stylesheet" href="dialkit.css">
+
+<style>
+/* ── Mint DS Fonts ── */
+@font-face {
+  font-family: 'Sohne';
+  src: url('fonts/Sohne-Kraftig.otf') format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GrowwSans';
+  src: url('fonts/GrowwSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GrowwSans';
+  src: url('fonts/GrowwSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'groww-huge-standard';
+  src: url('fonts/groww-huge-standard.woff2') format('woff2');
+  font-display: swap;
+}
+.gh-icon {
+  font-family: 'groww-huge-standard' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Color tokens ── */
+:root {
+  --backgroundPrimary:        #FFFFFF;
+  --backgroundSurfaceZ1:      #FFFFFF;
+  --backgroundSurfaceZ2:      #F7F7F7;
+  --backgroundSecondary:      #F7F7F7;
+  --backgroundTertiary:       #EFF0F1;
+  --backgroundAccent:         #04B488;
+  --backgroundNegative:       #ED5533;
+  --backgroundPositive:       #04B488;
+  --backgroundWarning:        #E7A71E;
+  --backgroundAccentSubtle:   #E9FAF3;
+  --backgroundNegativeSubtle: #FFF1ED;
+  --backgroundPositiveSubtle: #E9FAF3;
+  --backgroundWarningSubtle:  #FFF7DE;
+  --backgroundDisabled:       #F7F7F7;
+  --borderPrimary:            #E7E8E9;
+  --borderAccent:             #04B488;
+  --borderNegative:           #ED5533;
+  --borderDisabled:           #EFF0F1;
+  --borderNeutral:            #353839;
+  --contentPrimary:           #353839;
+  --contentSecondary:         #7F8283;
+  --contentTertiary:          #898C8E;
+  --contentDisabled:          #BABBBC;
+  --contentAccent:            #04B488;
+  --contentPositive:          #04B488;
+  --contentNegative:          #ED5533;
+  --contentWarning:           #E7A71E;
+  --contentOnColour:          #FFFFFF;
+
+  --bgDVLilacSubtle:      #F5F5FD;
+  --bgDVBlueSubtle:       #F2F8FF;
+  --bgDVSkyBlueSubtle:    #ECF7FF;
+  --bgDVMintGreenSubtle:  #E9FAF3;
+  --bgDVOliveGreenSubtle: #F3F8E7;
+  --bgDVYellowSubtle:     #FFF8D4;
+  --bgDVOrangeSubtle:     #FFF2DE;
+  --bgDVRedSubtle:        #FFEEE9;
+  --bgDVMagentaSubtle:    #FEF1F4;
+  --bgDVBrownSubtle:      #FCF2F1;
+  --bgDVGreySubtle:       #F2F5F9;
+
+  --dvLilacEmphasis:    #5D5C9C;
+  --dvBlueEmphasis:     #4452D6;
+  --dvSkyBlueEmphasis:  #1879AF;
+  --dvMintGreenEmphasis:#00825C;
+  --dvOliveGreenEmphasis:#697832;
+  --dvYellowEmphasis:   #947400;
+  --dvOrangeEmphasis:   #B26300;
+  --dvRedEmphasis:      #D93C17;
+  --dvMagentaEmphasis:  #C03370;
+  --dvBrownEmphasis:    #885854;
+  --dvGreyEmphasis:     #586679;
+
+  --gradientStart: var(--bgDVGreySubtle);
+  --gradientHeight: 20vh;
+
+  --font-body: 'GrowwSans', sans-serif;
+  --font-heading: 'Sohne', sans-serif;
+
+  --pageBg: #F0F1F3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --backgroundPrimary:        #060809;
+    --backgroundSurfaceZ1:      #151819;
+    --backgroundSurfaceZ2:      #1E2224;
+    --backgroundSecondary:      #151819;
+    --backgroundTertiary:       #1E2224;
+    --backgroundAccent:         #04B488;
+    --backgroundNegative:       #ED5533;
+    --backgroundPositive:       #04B488;
+    --backgroundWarning:        #E7A71E;
+    --backgroundAccentSubtle:   #0E261D;
+    --backgroundNegativeSubtle: #2D1711;
+    --backgroundPositiveSubtle: #0E261D;
+    --backgroundWarningSubtle:  #241E0B;
+    --backgroundDisabled:       #151819;
+    --borderPrimary:            #252A2C;
+    --borderAccent:             #04B488;
+    --borderNegative:           #ED5533;
+    --borderDisabled:           #1E2224;
+    --borderNeutral:            #F2F5F7;
+    --contentPrimary:           #F2F5F7;
+    --contentSecondary:         #989EA0;
+    --contentTertiary:          #696E70;
+    --contentDisabled:          #44494B;
+    --contentAccent:            #04B488;
+    --contentPositive:          #04B488;
+    --contentNegative:          #ED5533;
+    --contentWarning:           #E7A71E;
+    --contentOnColour:          #FFFFFF;
+
+    --bgDVLilacSubtle:      #202137;
+    --bgDVBlueSubtle:       #161C41;
+    --bgDVSkyBlueSubtle:    #102230;
+    --bgDVMintGreenSubtle:  #0E261D;
+    --bgDVOliveGreenSubtle: #1E2117;
+    --bgDVYellowSubtle:     #241E0B;
+    --bgDVOrangeSubtle:     #291A0C;
+    --bgDVRedSubtle:        #2D1711;
+    --bgDVMagentaSubtle:    #31111D;
+    --bgDVBrownSubtle:      #271A18;
+    --bgDVGreySubtle:       #1C1F24;
+
+    --dvLilacEmphasis:    #ADB0EF;
+    --dvBlueEmphasis:     #99B0FF;
+    --dvSkyBlueEmphasis:  #75C0F4;
+    --dvMintGreenEmphasis:#46D5A7;
+    --dvOliveGreenEmphasis:#AEC269;
+    --dvYellowEmphasis:   #FFD111;
+    --dvOrangeEmphasis:   #FFA52F;
+    --dvRedEmphasis:      #FF9479;
+    --dvMagentaEmphasis:  #FF8AB7;
+    --dvBrownEmphasis:    #E9A7A1;
+    --dvGreyEmphasis:     #A6B7CA;
+
+    --pageBg: #111315;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --backgroundPrimary:        #060809;
+  --backgroundSurfaceZ1:      #151819;
+  --backgroundSurfaceZ2:      #1E2224;
+  --backgroundSecondary:      #151819;
+  --backgroundTertiary:       #1E2224;
+  --backgroundAccent:         #04B488;
+  --backgroundNegative:       #ED5533;
+  --backgroundPositive:       #04B488;
+  --backgroundWarning:        #E7A71E;
+  --backgroundAccentSubtle:   #0E261D;
+  --backgroundNegativeSubtle: #2D1711;
+  --backgroundPositiveSubtle: #0E261D;
+  --backgroundWarningSubtle:  #241E0B;
+  --backgroundDisabled:       #151819;
+  --borderPrimary:            #252A2C;
+  --borderAccent:             #04B488;
+  --borderNegative:           #ED5533;
+  --borderDisabled:           #1E2224;
+  --borderNeutral:            #F2F5F7;
+  --contentPrimary:           #F2F5F7;
+  --contentSecondary:         #989EA0;
+  --contentTertiary:          #696E70;
+  --contentDisabled:          #44494B;
+  --contentAccent:            #04B488;
+  --contentPositive:          #04B488;
+  --contentNegative:          #ED5533;
+  --contentWarning:           #E7A71E;
+  --contentOnColour:          #FFFFFF;
+
+  --bgDVLilacSubtle:      #202137;
+  --bgDVBlueSubtle:       #161C41;
+  --bgDVSkyBlueSubtle:    #102230;
+  --bgDVMintGreenSubtle:  #0E261D;
+  --bgDVOliveGreenSubtle: #1E2117;
+  --bgDVYellowSubtle:     #241E0B;
+  --bgDVOrangeSubtle:     #291A0C;
+  --bgDVRedSubtle:        #2D1711;
+  --bgDVMagentaSubtle:    #31111D;
+  --bgDVBrownSubtle:      #271A18;
+  --bgDVGreySubtle:       #1C1F24;
+
+  --dvLilacEmphasis:    #ADB0EF;
+  --dvBlueEmphasis:     #99B0FF;
+  --dvSkyBlueEmphasis:  #75C0F4;
+  --dvMintGreenEmphasis:#46D5A7;
+  --dvOliveGreenEmphasis:#AEC269;
+  --dvYellowEmphasis:   #FFD111;
+  --dvOrangeEmphasis:   #FFA52F;
+  --dvRedEmphasis:      #FF9479;
+  --dvMagentaEmphasis:  #FF8AB7;
+  --dvBrownEmphasis:    #E9A7A1;
+  --dvGreyEmphasis:     #A6B7CA;
+
+  --pageBg: #111315;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--pageBg);
+  color: var(--contentPrimary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* ── iPhone 15 Pro Mockup ── */
+.iphone-chassis {
+  position: relative;
+  flex-shrink: 0;
+  width: 405px;
+  height: 868px;
+}
+
+.iphone-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 54px;
+  background: var(--iphoneBody);
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1.5px var(--iphoneEdgeLight),
+    0 0 0 2px var(--iphoneEdgeDark),
+    0 20px 60px rgba(0,0,0,0.35),
+    0 8px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+:root {
+  --iphoneBody: #1A1A1E;
+  --iphoneEdgeLight: rgba(255,255,255,0.12);
+  --iphoneEdgeDark: #0A0A0C;
+  --iphoneBezel: #0A0A0C;
+  --iphoneBtnColor: #2A2A2E;
+}
+
+.iphone-screen-bezel {
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border-radius: 48px;
+  background: var(--backgroundPrimary);
+  overflow: hidden;
+  z-index: 1;
+}
+.iphone-screen {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Dynamic Island */
+.dynamic-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 36px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 20;
+}
+.dynamic-island::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #1a2a3a, #0a0f15);
+  box-shadow: inset 0 0 2px rgba(255,255,255,0.08);
+}
+
+/* Side buttons */
+.iphone-btn {
+  position: absolute;
+  background: var(--iphoneBtnColor);
+  border-radius: 2px;
+  z-index: 5;
+}
+.iphone-btn-silent {
+  left: -3px;
+  top: 160px;
+  width: 3px;
+  height: 28px;
+  border-radius: 2px 0 0 2px;
+}
+.iphone-btn-volup {
+  left: -3px;
+  top: 210px;
+  width: 3px;
+  height: 48px;
+  border-radius: 2px 0 0 2px;
+}
+.iphone-btn-voldn {
+  left: -3px;
+  top: 268px;
+  width: 3px;
+  height: 48px;
+  border-radius: 2px 0 0 2px;
+}
+.iphone-btn-power {
+  right: -3px;
+  top: 230px;
+  width: 3px;
+  height: 80px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Speaker grille */
+.iphone-speaker {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  z-index: 2;
+}
+.iphone-speaker-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #333;
+}
+
+/* ── Gradient overlay ── */
+.gradient-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--gradientHeight);
+  background: linear-gradient(to bottom, var(--gradientStart), var(--backgroundPrimary));
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.4s ease;
+}
+
+/* ── iOS Status Bar ── */
+.ios-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px 0;
+  height: 54px;
+  position: relative;
+  z-index: 15;
+}
+.ios-status-time {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--contentPrimary);
+  letter-spacing: 0.02em;
+}
+.ios-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ios-status-icons svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--contentPrimary);
+}
+.ios-status-battery {
+  width: 25px;
+  height: 12px;
+  border: 1.5px solid var(--contentPrimary);
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1.5px;
+}
+.ios-status-battery::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 5px;
+  background: var(--contentPrimary);
+  border-radius: 0 1px 1px 0;
+}
+.ios-battery-fill {
+  width: 70%;
+  height: 100%;
+  background: var(--contentPrimary);
+  border-radius: 1px;
+}
+
+/* ── Home Indicator ── */
+.ios-home-indicator {
+  width: 134px;
+  height: 5px;
+  background: var(--contentPrimary);
+  border-radius: 3px;
+  margin: 8px auto;
+  opacity: 0.25;
+}
+
+/* ── Page content inside phone ── */
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  padding-block: 0;
+  padding-bottom: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── App bar ── */
+.app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 44px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.app-bar-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--contentPrimary);
+  cursor: pointer;
+}
+.app-bar-icon svg { width: 20px; height: 20px; }
+
+/* ── Hero section ── */
+.hero { padding: 8px 16px 20px; }
+.issuer-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--backgroundSurfaceZ1);
+  border: 1px solid var(--borderPrimary);
+}
+.issuer-meta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.issuer-tag {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--contentSecondary);
+  line-height: 18px;
+}
+.issuer-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--contentTertiary);
+}
+.bond-name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--contentPrimary);
+  margin-top: 4px;
+  line-height: 28px;
+  text-wrap: balance;
+}
+/* ── MDS Tag ── */
+.mds-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.mds-tag:empty, .mds-tag[data-variant="none"] { display: none; }
+.mds-tag-icon {
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mds-tag[data-variant="new"]            { background: var(--bgDVSkyBlueSubtle);  color: var(--dvSkyBlueEmphasis); }
+.mds-tag[data-variant="high-yield"]     { background: var(--bgDVOrangeSubtle);   color: var(--dvOrangeEmphasis); }
+.mds-tag[data-variant="senior-secured"] { background: var(--bgDVMintGreenSubtle);color: var(--dvMintGreenEmphasis); }
+.mds-tag[data-variant="tax-free"]       { background: var(--bgDVYellowSubtle);   color: var(--dvYellowEmphasis); }
+.mds-tag[data-variant="monthly-income"] { background: var(--bgDVLilacSubtle);    color: var(--dvLilacEmphasis); }
+
+/* ── Bond Card (Figma) ── */
+.bond-card {
+  margin: 16px;
+  background: var(--backgroundSurfaceZ1);
+  border: 1px solid var(--borderPrimary);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-ytm-block { display: flex; flex-direction: column; }
+.card-ytm-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-ytm-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--contentSecondary);
+  line-height: 20px;
+}
+.card-ytm-info {
+  font-size: 12px;
+  color: var(--contentSecondary);
+  cursor: help;
+}
+.card-ytm-value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--contentPrimary);
+  line-height: 36px;
+  font-variant-numeric: tabular-nums;
+}
+.card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card-data-row {
+  display: flex;
+  gap: 16px;
+}
+.card-data-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-data-key {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--contentSecondary);
+  line-height: 20px;
+}
+.card-data-val {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--contentPrimary);
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Logo previews in DialKit dropdown ── */
+.dialkit-select-option img.dk-logo-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-right: 8px;
+  flex-shrink: 0;
+  border: 1px solid rgba(128,128,128,0.15);
+}
+.dialkit-select-option {
+  display: flex !important;
+  align-items: center !important;
+}
+.dialkit-select-trigger .dk-logo-preview {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-right: 6px;
+  border: 1px solid rgba(128,128,128,0.15);
+}
+
+/* ── CTA ── */
+.cta-area {
+  flex-shrink: 0;
+  padding: 12px 16px 0;
+  background: var(--backgroundPrimary);
+  border-top: 1px solid var(--borderPrimary);
+  z-index: 10;
+}
+.cta-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--backgroundAccent);
+  color: var(--contentOnColour);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 24px;
+}
+
+/* ── Layout wrapper ── */
+.mockup-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 100vh;
+}
+
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+  .iphone-chassis {
+    width: 100%;
+    max-width: 405px;
+    height: 780px;
+  }
+  .iphone-frame {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .iphone-screen-bezel {
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 0;
+  }
+  .iphone-btn, .iphone-speaker { display: none; }
+}
+</style>
+
+<div class="mockup-layout">
+
+<!-- iPhone 15 Pro Mockup -->
+<div class="iphone-chassis">
+  <div class="iphone-btn iphone-btn-silent"></div>
+  <div class="iphone-btn iphone-btn-volup"></div>
+  <div class="iphone-btn iphone-btn-voldn"></div>
+  <div class="iphone-btn iphone-btn-power"></div>
+  <div class="iphone-frame">
+    <div class="iphone-speaker">
+      <span class="iphone-speaker-dot"></span><span class="iphone-speaker-dot"></span><span class="iphone-speaker-dot"></span><span class="iphone-speaker-dot"></span><span class="iphone-speaker-dot"></span><span class="iphone-speaker-dot"></span>
+    </div>
+    <div class="iphone-screen-bezel">
+      <div class="dynamic-island"></div>
+      <div class="iphone-screen">
+    <div class="ios-status-bar">
+      <span class="ios-status-time">9:41</span>
+      <div class="ios-status-icons">
+        <svg viewBox="0 0 16 16"><path d="M1 13h2V8H1v5zm4 0h2V5H5v8zm4 0h2V3H9v10zm4 0h2V1h-2v12z"/></svg>
+        <svg viewBox="0 0 16 16"><path d="M8 2.8C5.6 2.8 3.4 3.8 1.8 5.4l1.1 1.1C4.2 5.2 6 4.4 8 4.4s3.8.8 5.1 2.1l1.1-1.1C12.6 3.8 10.4 2.8 8 2.8zm0 3.2c-1.6 0-3 .6-4.1 1.7l1.1 1.1c.8-.8 1.9-1.2 3-1.2s2.2.4 3 1.2l1.1-1.1C11 6.6 9.6 6 8 6zm0 3.2c-.8 0-1.5.3-2.1.9l2.1 2.5 2.1-2.5c-.6-.6-1.3-.9-2.1-.9z"/></svg>
+        <div class="ios-status-battery"><div class="ios-battery-fill"></div></div>
+      </div>
+    </div>
+    <div class="page-wrap">
+      <div class="gradient-overlay" id="gradientOverlay"></div>
+      <div class="app-bar">
+        <div class="app-bar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div class="app-bar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+      </div>
+      <div class="hero">
+        <img class="issuer-logo" id="heroLogo" src="logos/Aye Finance.png" alt="Issuer logo" crossorigin="anonymous">
+        <div class="issuer-meta">
+          <span class="issuer-tag" id="issuerName">Aye Finance</span>
+          <span class="issuer-dot"></span>
+          <span class="issuer-tag">NCD</span>
+        </div>
+        <div class="bond-name" id="bondName">Aye Finance Pvt Ltd NCD Tranche I</div>
+      </div>
+      <div class="bond-card">
+        <div class="card-top">
+          <div class="card-ytm-block">
+            <div class="card-ytm-header">
+              <span class="card-ytm-label">YTM</span>
+              <span class="card-ytm-info gh-icon">&#xeadb;</span>
+            </div>
+            <span class="card-ytm-value" id="ytmValue">12.40%</span>
+          </div>
+          <div class="mds-tag" id="mdsTag" data-variant="new">
+            <span class="mds-tag-icon gh-icon" id="mdsTagIcon">&#xeb98;</span>
+            <span id="mdsTagLabel">New</span>
+          </div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-data-row">
+            <div class="card-data-cell">
+              <span class="card-data-key">Price/unit</span>
+              <span class="card-data-val">&#8377;10,000</span>
+            </div>
+            <div class="card-data-cell">
+              <span class="card-data-key">Tenure</span>
+              <span class="card-data-val">12 months</span>
+            </div>
+          </div>
+          <div class="card-data-row">
+            <div class="card-data-cell">
+              <span class="card-data-key">Interest payout</span>
+              <span class="card-data-val">Annually</span>
+            </div>
+            <div class="card-data-cell">
+              <span class="card-data-key">Principal payout</span>
+              <span class="card-data-val">Cumulative</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-area">
+      <button class="cta-btn">Invest Now</button>
+      <div class="ios-home-indicator"></div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+</div><!-- end .mockup-layout -->
+
+<script src="dialkit.js"></script>
+<script>
+// ── Deduplicated logo list ──
+var LOGOS = [
+  "Adani Enterprises","Akara Capital","Asirvad","Auxilo Finserve","Aye Finance",
+  "Capri Global","Dishman","EFL","Early Salary","Finkurve",
+  "Finnable Credit","ICL fincorp","IFL Finance Limited",
+  "IIFL Samasta","IKF Finance","Incred",
+  "Keertana Finserv","Kosamattam Finance Ltd","Krazybee Financial logo","MANBA",
+  "Microfin Midland","Mufin","Muthoot Capital",
+  "Muthoot microfin","Muthoottu Mini financiers","Namra_rfq","Navi Finserv",
+  "Oxyzo Financial Services","Profectus","RDC","SFL","SK","Sarathi",
+  "Spandana Sphoorty","Ugro Capital","Varthana Finance","progfin"
+];
+
+var FAMILIES = [
+  { name: "Brown",      hue: 5,   token: "--bgDVBrownSubtle" },
+  { name: "Red",        hue: 11,  token: "--bgDVRedSubtle" },
+  { name: "Orange",     hue: 34,  token: "--bgDVOrangeSubtle" },
+  { name: "Yellow",     hue: 49,  token: "--bgDVYellowSubtle" },
+  { name: "OliveGreen", hue: 78,  token: "--bgDVOliveGreenSubtle" },
+  { name: "MintGreen",  hue: 162, token: "--bgDVMintGreenSubtle" },
+  { name: "SkyBlue",    hue: 205, token: "--bgDVSkyBlueSubtle" },
+  { name: "Blue",       hue: 233, token: "--bgDVBlueSubtle" },
+  { name: "Lilac",      hue: 240, token: "--bgDVLilacSubtle" },
+  { name: "Magenta",    hue: 333, token: "--bgDVMagentaSubtle" },
+];
+var GREY_FAMILY = { name: "Grey", token: "--bgDVGreySubtle" };
+
+var FAMILY_COLORS = {
+  Brown:"#9D615C", Red:"#FF5E3B", Orange:"#F59817", Yellow:"#FCCE00",
+  OliveGreen:"#A1B55C", MintGreen:"#04B488", SkyBlue:"#4DA4DD",
+  Blue:"#5669FF", Lilac:"#7A7AC6", Magenta:"#C73A75", Grey:"#808FA3"
+};
+
+// ── Color extraction ──
+function extractDominantColor(imgSrc) {
+  return new Promise(function(resolve) {
+    var img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      var canvas = document.createElement("canvas");
+      var SIZE = 50;
+      canvas.width = SIZE; canvas.height = SIZE;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, SIZE, SIZE);
+      var data;
+      try { data = ctx.getImageData(0, 0, SIZE, SIZE).data; } catch(e) { resolve(null); return; }
+      var buckets = {}, totalPixels = 0, filteredPixels = 0;
+      for (var i = 0; i < data.length; i += 4) {
+        var r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+        totalPixels++;
+        if (a < 128) continue;
+        if (r > 240 && g > 240 && b > 240) continue;
+        if (r < 15 && g < 15 && b < 15) continue;
+        filteredPixels++;
+        var key = (r >> 5) + "," + (g >> 5) + "," + (b >> 5);
+        if (!buckets[key]) buckets[key] = { count: 0, rS: 0, gS: 0, bS: 0 };
+        buckets[key].count++; buckets[key].rS += r; buckets[key].gS += g; buckets[key].bS += b;
+      }
+      var ratio = filteredPixels / totalPixels;
+      if (ratio < 0.05) { resolve({ r: 0, g: 0, b: 0, ratio: ratio, tooFew: true }); return; }
+      var best = null, keys = Object.keys(buckets);
+      for (var k = 0; k < keys.length; k++) { var bk = buckets[keys[k]]; if (!best || bk.count > best.count) best = bk; }
+      if (!best) { resolve(null); return; }
+      resolve({ r: Math.round(best.rS / best.count), g: Math.round(best.gS / best.count), b: Math.round(best.bS / best.count), ratio: ratio, tooFew: false });
+    };
+    img.onerror = function() { resolve(null); };
+    img.src = imgSrc;
+  });
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
+  if (max === min) return { h: 0, s: 0, l: l };
+  var d = max - min, s = l > 0.5 ? d / (2 - max - min) : d / (max + min), h;
+  if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+  else if (max === g) h = ((b - r) / d + 2) / 6;
+  else h = ((r - g) / d + 4) / 6;
+  return { h: h * 360, s: s, l: l };
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + [r,g,b].map(function(c) { return c.toString(16).padStart(2,"0"); }).join("");
+}
+
+function mapToFamily(rgb) {
+  if (!rgb || rgb.tooFew) return { family: GREY_FAMILY, fallback: true, reason: "too few chromatic pixels" };
+  var hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  if (hsl.s < 0.12) return { family: GREY_FAMILY, fallback: true, reason: "low saturation (" + Math.round(hsl.s * 100) + "%)", hsl: hsl };
+  if (hsl.l < 0.08) return { family: GREY_FAMILY, fallback: true, reason: "near-black (L=" + Math.round(hsl.l * 100) + "%)", hsl: hsl };
+  if (hsl.l > 0.92) return { family: GREY_FAMILY, fallback: true, reason: "near-white (L=" + Math.round(hsl.l * 100) + "%)", hsl: hsl };
+  if (hsl.l > 0.82 && hsl.s < 0.35) return { family: GREY_FAMILY, fallback: true, reason: "washed-out (L=" + Math.round(hsl.l * 100) + "%, S=" + Math.round(hsl.s * 100) + "%)", hsl: hsl };
+  var closest = null, minDist = Infinity;
+  for (var i = 0; i < FAMILIES.length; i++) {
+    var dist = Math.min(Math.abs(hsl.h - FAMILIES[i].hue), 360 - Math.abs(hsl.h - FAMILIES[i].hue));
+    if (dist < minDist) { minDist = dist; closest = FAMILIES[i]; }
+  }
+  return { family: closest, fallback: false, reason: "hue match (dist " + Math.round(minDist) + "°)", hsl: hsl };
+}
+
+function applyGradient(family) {
+  document.documentElement.style.setProperty("--gradientStart", "var(" + family.token + ")");
+}
+
+// ── DialKit setup ──
+var dialRoot = DialKit.createDialRoot({
+  position: "top-right",
+  defaultOpen: true,
+  theme: "system"
+});
+document.body.appendChild(dialRoot.element);
+
+var logoOptions = LOGOS.map(function(name) {
+  return { value: name, label: name };
+});
+
+var dial = DialKit.createDialKit("Gradient Tester", {
+  theme: {
+    type: "select",
+    options: [
+      { value: "light", label: "Light" },
+      { value: "system", label: "System" },
+      { value: "dark", label: "Dark" }
+    ],
+    default: "system"
+  },
+  issuer: {
+    type: "select",
+    options: logoOptions,
+    default: "Aye Finance"
+  },
+  tag: {
+    type: "select",
+    options: [
+      { value: "none", label: "None" },
+      { value: "new", label: "New" },
+      { value: "high-yield", label: "High Yield" },
+      { value: "senior-secured", label: "Senior Secured" },
+      { value: "tax-free", label: "Tax Free" },
+      { value: "monthly-income", label: "Monthly Income" }
+    ],
+    default: "new"
+  },
+  gradient: {
+    type: "select",
+    options: [
+      { value: "on", label: "On" },
+      { value: "off", label: "Off" }
+    ],
+    default: "on"
+  },
+  gradientHeight: [20, 5, 40, 1]
+});
+
+var extraction = DialKit.createDialKit("Extraction", {
+  color: { type: "text", default: "—", placeholder: "" },
+  hsl: { type: "text", default: "—", placeholder: "" },
+  token: { type: "text", default: "—", placeholder: "" }
+}, { defaultCollapsed: false });
+
+function selectLogo(name) {
+  document.getElementById("heroLogo").src = "logos/" + name + ".png";
+  document.getElementById("issuerName").textContent = name;
+  document.getElementById("bondName").textContent = name + " NCD Tranche I";
+
+  extractDominantColor("logos/" + name + ".png").then(function(rgb) {
+    var result = mapToFamily(rgb);
+    applyGradient(result.family);
+    updateDebug(rgb, result);
+  });
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
+}
+
+function updateDebug(rgb, result) {
+  var colorVal = "—";
+  var hslVal = "—";
+
+  if (!rgb || rgb.tooFew) {
+    colorVal = rgb ? "filtered out" : "failed";
+  } else {
+    colorVal = rgbToHex(rgb.r, rgb.g, rgb.b);
+    if (result.hsl) {
+      hslVal = Math.round(result.hsl.h) + "° / " + Math.round(result.hsl.s * 100) + "% / " + Math.round(result.hsl.l * 100) + "%";
+    }
+  }
+
+  var fam = result.family;
+  extraction.setValues({ color: colorVal, hsl: hslVal, token: fam.token });
+}
+
+var TAG_CONFIG = {
+  "none":            { icon: "",       label: "" },
+  "new":             { icon: "", label: "New" },
+  "high-yield":      { icon: "", label: "High Yield" },
+  "senior-secured":  { icon: "", label: "Senior Secured" },
+  "tax-free":        { icon: "", label: "Tax Free" },
+  "monthly-income":  { icon: "", label: "Monthly Income" }
+};
+
+function applyTag(variant) {
+  var tag = document.getElementById("mdsTag");
+  var icon = document.getElementById("mdsTagIcon");
+  var label = document.getElementById("mdsTagLabel");
+  var cfg = TAG_CONFIG[variant] || TAG_CONFIG["none"];
+  tag.setAttribute("data-variant", variant);
+  icon.textContent = cfg.icon;
+  label.textContent = cfg.label;
+}
+
+dial.subscribe(function(values) {
+  applyTheme(values.theme);
+  selectLogo(values.issuer);
+  applyTag(values.tag);
+  document.getElementById("gradientOverlay").style.display = values.gradient === "off" ? "none" : "";
+  document.documentElement.style.setProperty("--gradientHeight", values.gradientHeight + "vh");
+});
+
+// ── Logo previews in DialKit dropdown ──
+function injectLogoPreviewsInDropdown() {
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (!(node instanceof HTMLElement)) return;
+        var opts = node.querySelectorAll ? node.querySelectorAll(".dialkit-select-option") : [];
+        if (node.classList && node.classList.contains("dialkit-select-option")) opts = [node];
+        opts.forEach(function(opt) {
+          if (opt.querySelector(".dk-logo-preview")) return;
+          var text = opt.textContent.trim();
+          if (LOGOS.indexOf(text) === -1) return;
+          var img = document.createElement("img");
+          img.className = "dk-logo-preview";
+          img.src = "logos/" + text + ".png";
+          img.alt = "";
+          img.loading = "lazy";
+          opt.insertBefore(img, opt.firstChild);
+        });
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+injectLogoPreviewsInDropdown();
+
+// Initial
+selectLogo("Aye Finance");
+applyTag("new");
+</script>
