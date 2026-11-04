@@ -97,7 +97,7 @@ function clamp01(low: number, high: number, val: number): number {
 
 export default function ProductScreen() {
   const { colors } = useTheme();
-  const { setSelectedLogo } = useThemeOverride();
+  const { state, setSelectedLogo } = useThemeOverride();
   const resolved = useResolvedElementColors();
   const { back, push } = useRouter();
   const insets = useSafeAreaInsets();
@@ -120,6 +120,9 @@ export default function ProductScreen() {
     setSelectedLogo(LOGO_CATALOG[0].id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const selectedLogo =
+    LOGO_CATALOG.find((l) => l.id === state.selectedLogoId) ?? LOGO_CATALOG[0];
 
   useEffect(() => {
     fetch(YF_QUOTE_URL, { headers: { 'User-Agent': 'Mozilla/5.0' } })
@@ -213,7 +216,7 @@ export default function ProductScreen() {
 
       <ProductAppBar
         scrolled={scrolled}
-        name={FALLBACK.name}
+        name={selectedLogo.name}
         price={priceStr}
         change={changeStr}
         changePositive={positive}
@@ -237,12 +240,13 @@ export default function ProductScreen() {
         }}
       >
         <StockHeader
-          ticker={FALLBACK.ticker}
-          name={FALLBACK.name}
+          ticker={selectedLogo.ticker}
+          name={selectedLogo.name}
           price={priceStr}
           change={changeStr}
           changePositive={positive}
           period={activeTf}
+          logoSource={selectedLogo.source}
         />
 
         <StockChart

@@ -1,8 +1,10 @@
+import type { ImageSourcePropType } from 'react-native';
+
 export interface LogoEntry {
   id: string;
   ticker: string;
   name: string;
-  source: ReturnType<typeof require>;
+  source: ImageSourcePropType;
 }
 
 export const LOGO_CATALOG: LogoEntry[] = [

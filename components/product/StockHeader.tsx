@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { useTheme } from '@/constants/theme';
 import { textStyles, spacing } from '@/constants/tokens';
 import { Icon } from '@/components/ui/Icon';
+import type { ImageSourcePropType } from 'react-native';
 
 interface StockHeaderProps {
   ticker: string;
@@ -11,7 +12,7 @@ interface StockHeaderProps {
   change: string;
   changePositive: boolean;
   period: string;
-  logoSource?: number;
+  logoSource?: ImageSourcePropType;
 }
 
 export function StockHeader({ ticker, name, price, change, changePositive, period, logoSource }: StockHeaderProps) {
