@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { Platform, View, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useDerivedValue,
@@ -21,6 +21,7 @@ import { ProductAppBar } from '@/components/ui/ProductAppBar';
 import { Button } from '@/components/ui/Button';
 import { ThemePanel } from '@/components/ui/ThemePanel';
 import { ThemePanelFab } from '@/components/ui/ThemePanelFab';
+import { ThemeDialKit } from '@/components/ui/ThemeDialKit';
 import { StockHeader } from '@/components/product/StockHeader';
 import { StockChart } from '@/components/product/Chart';
 import { TimeframePills } from '@/components/product/TimeframePills';
@@ -207,9 +208,13 @@ export default function ProductScreen() {
   const topInset = isWide ? SIMULATED_TOP_INSET : insets.top;
 
   const phoneContent = (
-    <View style={[styles.container, { backgroundColor: colors.backgroundPrimary, paddingTop: topInset }]}>
+    <View style={[styles.container, { backgroundColor: resolved.backgroundColor, paddingTop: topInset }]}>
       {resolved.gradientEnabled && (
-        <GradientOverlay heightPct={resolved.gradientHeightPct} color={resolved.gradientColor} />
+        <GradientOverlay
+          heightPct={resolved.gradientHeightPct}
+          color={resolved.gradientColor}
+          backgroundColor={resolved.backgroundColor}
+        />
       )}
 
       <StatusBar scrolled={scrolled} />
@@ -311,10 +316,19 @@ export default function ProductScreen() {
     return (
       <View style={styles.desktopWrapper}>
         <View style={styles.desktopRow}>
-          <ThemePanel />
+          {Platform.OS === 'web' ? <ThemeDialKit /> : <ThemePanel />}
           <IPhoneMockup>{phoneContent}</IPhoneMockup>
         </View>
       </View>
+    );
+  }
+
+  if (Platform.OS === 'web') {
+    return (
+      <>
+        {phoneContent}
+        <ThemeDialKit />
+      </>
     );
   }
 

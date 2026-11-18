@@ -48,6 +48,23 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
           </View>
         )}
 
+        <PanelSection title="Background">
+          <PanelSwatchRow
+            label="Page background"
+            color={resolved.backgroundColor}
+            isAuto={!state.manualOverrides.backgroundColor}
+            onPick={(hex) => setManualOverride('backgroundColor', hex)}
+            onReset={() => setManualOverride('backgroundColor', undefined)}
+          />
+          <PanelSwatchRow
+            label="Chart background"
+            color={resolved.chartBackgroundColor}
+            isAuto={!state.manualOverrides.chartBackgroundColor}
+            onPick={(hex) => setManualOverride('chartBackgroundColor', hex)}
+            onReset={() => setManualOverride('chartBackgroundColor', undefined)}
+          />
+        </PanelSection>
+
         <PanelSection title="Gradient">
           <PanelToggle
             label="Top gradient"

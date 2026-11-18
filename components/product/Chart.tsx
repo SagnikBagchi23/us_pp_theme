@@ -249,7 +249,10 @@ export function StockChart({
   }), [computeIdx, updateScrubLabel, scrubActive, scrubIdx]);
 
   return (
-    <View style={[styles.outer, { height: chartHeight }]} onLayout={onLayout}>
+    <View
+      style={[styles.outer, { height: chartHeight, backgroundColor: resolved.chartBackgroundColor }]}
+      onLayout={onLayout}
+    >
       <View style={[StyleSheet.absoluteFill, styles.clip]} {...pan.panHandlers}>
         {size.w > 0 && (
           <SvgCanvas

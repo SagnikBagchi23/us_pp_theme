@@ -37,6 +37,8 @@ export interface PerElementOverrides {
   sipBorderColor?: string;
   chartPositiveColor?: string;
   chartNegativeColor?: string;
+  backgroundColor?: string;
+  chartBackgroundColor?: string;
 }
 
 export interface GradientSettings {
@@ -132,6 +134,8 @@ export interface ResolvedElementColors {
   sipBorderColor: string;
   chartPositiveColor: string;
   chartNegativeColor: string;
+  backgroundColor: string;
+  chartBackgroundColor: string;
   gradientColor: string;
   gradientEnabled: boolean;
   gradientHeightPct: number;
@@ -152,6 +156,8 @@ export function useResolvedElementColors(): ResolvedElementColors {
     sipBorderColor: manualOverrides.sipBorderColor ?? colors.borderPrimary,
     chartPositiveColor: manualOverrides.chartPositiveColor ?? derived?.emphasis ?? colors.contentPositive,
     chartNegativeColor: manualOverrides.chartNegativeColor ?? colors.contentNegative,
+    backgroundColor: manualOverrides.backgroundColor ?? colors.backgroundPrimary,
+    chartBackgroundColor: manualOverrides.chartBackgroundColor ?? colors.backgroundPrimary,
     gradientColor: gradient.color ?? derived?.subtle ?? colors.backgroundSurfaceZ1,
     gradientEnabled: gradient.enabled,
     gradientHeightPct: gradient.heightPct,

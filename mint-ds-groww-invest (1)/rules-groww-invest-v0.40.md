@@ -1,12 +1,12 @@
 # Mint Design System — Usage Rules · Groww Invest
 
 > **Theme:** Groww Invest
-> **Version:** v0.33
+> **Version:** v0.40
 > **Type:** Usage Guidelines
 > **Note:** This file changes independently of token definitions (design-system.md). Token values live there; how and when to use them lives here.
 
 
-> **Downloaded:** 28 Sep, 2026
+> **Downloaded:** 17 Nov, 2026
 
 ---
 
@@ -23,7 +23,8 @@
    - 4.5 Positive returns always semantic
 5. [Component Application Notes](#5-component-application-notes) — *how Invest uses each component*
 6. [In-context Examples](#6-in-context-examples)
-7. [Changelog](#7-changelog)
+7. [Asset Sourcing](#7-asset-sourcing)
+8. [Changelog](#8-changelog)
 
 ---
 
@@ -78,8 +79,13 @@ Used for surfaces — the base canvas and elevated panels.
 | `backgroundPrimary` | Main app canvas — the lowest surface |
 | `backgroundSurfaceZ1` | Cards, sheets, bottom drawers — one level above primary |
 | `backgroundSurfaceZ2` | Nested cards, modals, popovers — two levels above primary |
-| `backgroundSecondary` | Subtle alternate fills within a surface |
-| `backgroundTertiary` | Further de-emphasised fills |
+| `backgroundSurfaceDocked` | Persistent chrome above scrolled content — sticky app bar (scrolled state), bottom navigation bar |
+| `backgroundSecondary` | Rarely used. A flat alternate neutral fill within a surface — e.g. a table header row — not an elevation step |
+| `backgroundTertiary` | Rarely used. Further de-emphasised flat fill, same rare use case as `backgroundSecondary` |
+
+**Pick the semantically correct token even where it renders identically to another token in a given mode.** `backgroundSecondary`/`Tertiary` happen to match `backgroundSurfaceZ1`/`Z2`'s pixel value in dark mode — that doesn't make them interchangeable. Tokens are chosen for what they mean, not what they currently render as; that's what lets the same code swap cleanly across light/dark and future brand updates.
+
+**`backgroundSurfaceDocked` shares the same elevation tier as `backgroundSurfaceZ1`** — not a floating content container, but structurally equivalent. Nested elements inside docked chrome (bottom nav icon dividers, app bar borders) use `OnSurfaceZ1` variants, same as any other `backgroundSurfaceZ1` surface.
 
 #### High emphasis backgrounds
 
@@ -126,6 +132,10 @@ Error banner    → backgroundNegativeSubtle   (inline message box, not a button
 Sell button     → backgroundNegative         (destructive action)
 ```
 
+#### Overlay / scrim backgrounds
+
+`backgroundOverlayPrimary` is the scrim colour behind any bottom sheet (app) or modal/pop-up (web) — the only overlay token in active use. `backgroundOverlaySecondary` is defined for a lighter-opacity scrim but has no current use case — do not reach for it.
+
 > **Financial data rule:** For price changes, profit, loss, returns, and any gain/loss indicator, use `contentPositive` or `contentNegative` on a transparent background. Do not wrap them in a `backgroundPositiveSubtle` or `backgroundNegativeSubtle` chip. The subtle background tokens are reserved for message boxes and contextual banners where a background tint is needed to create visual separation and meet accessibility requirements. Using them on financial data values creates unnecessary visual noise and misrepresents the token's intent.
 
 ---
@@ -140,14 +150,35 @@ Sell button     → backgroundNegative         (destructive action)
 | `contentSecondary` | Supporting text — labels, subtitles, captions |
 | `contentTertiary` | De-emphasised — category dividers, metadata, timestamps |
 
+**`contentTertiary` is rarely the right call.** Most "de-emphasised" text is better served by `contentSecondary` — reach for `contentTertiary` only for the lowest tier of visual weight (e.g. a category divider label), not as the default second step down from `contentPrimary`.
+
 #### Semantic content
 
 | Token | Use for |
 |-------|---------|
 | `contentAccent` | Brand-coloured text — CTAs, highlighted values |
+| `contentAccentSecondary` | Secondary brand accent — tags/chips, and signed (+/-) position quantity in F&O, Intraday, MTF |
 | `contentPositive` | Gains, returns in profit, positive confirmations |
 | `contentNegative` | Losses, errors, destructive actions |
 | `contentWarning` | Caution labels |
+
+**`contentAccentSecondary` (and `backgroundAccentSecondary`/`borderAccentSecondary`) have two independent use cases.** Tags/chips that call for a secondary brand accent, and signed (+/-) quantity values specifically for trading positions — F&O, Intraday, MTF. Never use it for Delivery/CNC/invest quantity — those use `contentPrimary` or `contentSecondary` (never a signed colour) depending on the UI's emphasis needs. The qty use case is deliberately distinct from gain/loss: a quantity sign is not financial performance, so it does not take `contentPositive`/`contentNegative` either.
+
+```
++50 qty (F&O position)        → contentAccentSecondary   ✓
+-20 qty (Intraday position)   → contentAccentSecondary   ✓
++50 qty (Delivery/CNC)        → contentPrimary / contentSecondary   ✓
++50 qty (Delivery/CNC)        → contentAccentSecondary   ✗
++₹2,004.50 (1D return)         → contentPositive (financial gain, not qty)   ✓
+```
+
+**Static qty stays plain text; only an interactive qty tag gets a chip.** The rule above (plain `contentAccentSecondary`, no background) is for qty shown as inert text — a position row, an order summary. When the qty value is itself a tappable control — e.g. a Pro mode quantity tag that expands quick actions like a fast exit — wrap it in the Subtle-tier pairing instead: `backgroundAccentSecondarySubtle` + `contentOnAccentSecondarySubtle`. Never the solid `backgroundAccentSecondary` fill on a tag — that's reserved for high-emphasis components like buttons, and competes with real actions when used here. Both treatments are valid; the deciding factor is whether the qty is clickable, not F&O vs. Delivery.
+
+```
++1,500 qty (Pro mode, static text)                  → contentAccentSecondary, no background                              ✓
++1,500 qty (Pro mode, clickable → quick actions)     → backgroundAccentSecondarySubtle chip + contentOnAccentSecondarySubtle   ✓
++1,500 qty (Pro mode, clickable → quick actions)     → backgroundAccentSecondary solid fill + white text                   ✗  (competes with real actions)
+```
 
 **`contentPositive` and `contentNegative` are the primary way to communicate financial data.** For price changes, profit/loss values, return percentages, and any gain/loss indicator, apply these tokens directly to the text on a transparent background. Do not add a `backgroundPositiveSubtle` or `backgroundNegativeSubtle` fill behind financial values — that pattern is reserved for message boxes.
 
@@ -173,6 +204,7 @@ Sell button     → backgroundNegative         (destructive action)
 | ContentOn token | Pairs with |
 |----------------|-----------|
 | `contentOnAccentSubtle` | `backgroundAccentSubtle` |
+| `contentOnAccentSecondarySubtle` | `backgroundAccentSecondarySubtle` |
 | `contentOnPositiveSubtle` | `backgroundPositiveSubtle` |
 | `contentOnNegativeSubtle` | `backgroundNegativeSubtle` |
 | `contentOnWarningSubtle` | `backgroundWarningSubtle` |
@@ -182,6 +214,7 @@ Sell button     → backgroundNegative         (destructive action)
 | Subtle background | Correct text token | Never use |
 |------------------|-------------------|-----------|
 | `backgroundAccentSubtle` | `contentOnAccentSubtle` | `contentAccent` |
+| `backgroundAccentSecondarySubtle` | `contentOnAccentSecondarySubtle` | `contentAccentSecondary` |
 | `backgroundPositiveSubtle` | `contentOnPositiveSubtle` | `contentPositive` |
 | `backgroundNegativeSubtle` | `contentOnNegativeSubtle` | `contentNegative` |
 | `backgroundWarningSubtle` | `contentOnWarningSubtle` | `contentWarning` |
@@ -194,6 +227,16 @@ Never mix tokens across semantic roles. `contentOnPositiveSubtle` on `background
 Text on dark overlay card  →  contentInversePrimary   ✓
 Text on dark overlay card  →  contentPrimary           ✗  (contentPrimary is for light surfaces)
 ```
+
+**`contentAlwaysDark` / `contentAlwaysLight` never flip with theme mode.** Use only on surfaces with a fixed background regardless of light/dark mode — brand-coloured banners, illustrations, marketing cards. These are not a substitute for `contentPrimary` / `contentInversePrimary` on surfaces that do adapt to mode.
+
+```
+Text on a brand-coloured banner (fixed bg in both modes)  →  contentAlwaysDark / contentAlwaysLight  ✓
+Text on a normal card that darkens in dark mode           →  contentPrimary (adapts automatically)    ✓
+Text on a normal card that darkens in dark mode           →  contentAlwaysDark                        ✗
+```
+
+**`backgroundAlwaysDark` / `backgroundAlwaysLight` follow the same rule as their content counterparts — fixed background, same in both modes.** Use for the same brand-coloured banner / illustration / marketing-card surfaces, typically paired with `contentAlwaysLight` / `contentAlwaysDark` respectively (background and text invert against each other, not with mode). Never use on a surface that's meant to adapt — that's what `backgroundSurfaceZ1`/`Z2` or `backgroundPrimary` are for.
 
 **Never mix two different colour tokens within the same subtitle or same-level text.** If two elements are at the same hierarchy (both are sub-text, both are metadata, both are secondary labels in the same row), they must use the same colour token. The colour communicates hierarchy — mixing tokens at the same level creates false hierarchy.
 
@@ -306,15 +349,26 @@ Set colour on the `mds-iconview` wrapper — the icon inherits it automatically.
 
 | Context | Token |
 |---------|-------|
-| Icon adjacent to text | Match the text's colour token exactly |
 | Icon in isolation (no adjacent text) | `contentPrimary` |
-| Semantic icon (error, success, warning) | `contentNegative`, `contentPositive`, `contentWarning` |
+| Icon adjacent to a text label **in a list item** (default) | `contentSecondary` — even though the label itself is `contentPrimary`. The icon is always one step down from its label. |
+| Semantic icon (error, success, warning), or matching a semantic value | `contentNegative`, `contentPositive`, `contentWarning` — matches the value/state, not the default step-down rule |
+| Navigation/action icon in a Standard App Bar | `contentPrimary` — matches the title. The list-item step-down rule doesn't apply to app bar chrome (see `design-system.md` §10.3). |
+| Selected icon + label in bottom navigation | `contentAccentSecondary` for both the icon and the label |
+
+**The step-down rule is list-item-scoped, not universal.** It governs an icon paired with a label inside a row (settings list, account menu). Standalone chrome components — the Standard App Bar's back/action icons — intentionally match their title's `contentPrimary` instead of stepping down, since there's no "list" relationship between the icon and the page title to signal hierarchy within.
 
 ```html
-<!-- Icon matches adjacent contentSecondary text -->
+<!-- CORRECT — icon one step down from its label (settings list row) -->
 <span class="mds-iconview mds-iconview--medium" style="color: var(--contentSecondary);">
-  <i class="gh-standard-arrow-right-01"></i>
+  <i class="gh-standard-user"></i>
 </span>
+<span style="color: var(--contentPrimary);">Account details</span>
+
+<!-- WRONG — icon matched to the label's colour instead of stepping down -->
+<span class="mds-iconview mds-iconview--medium" style="color: var(--contentPrimary);">
+  <i class="gh-standard-user"></i>
+</span>
+<span style="color: var(--contentPrimary);">Account details</span>
 
 <!-- Isolated navigation icon -->
 <span class="mds-iconview mds-iconview--medium" style="color: var(--contentPrimary);">
@@ -324,6 +378,9 @@ Set colour on the `mds-iconview` wrapper — the icon inherits it automatically.
 - P/L row — trailing arrow → `contentPositive` or `contentNegative` (matches the value)
 - Error state icon → `contentNegative`
 - Standalone navigation icon → `contentPrimary`
+- Standard App Bar navigation/action icon → `contentPrimary` (matches the title — not a list item, so the step-down rule doesn't apply; see `design-system.md` §10.3)
+- Bottom nav tab, selected → `contentAccentSecondary` (icon + label both — the other exception to the icon-steps-down rule, since the label itself is also `contentAccentSecondary` here)
+- Bottom nav tab, unselected → `contentTertiary` for both icon and label (see `design-system.md` §10.4 for the full active/inactive spec)
 
 ---
 
@@ -349,6 +406,73 @@ Example: A holdings card uses `backgroundSurfaceZ1`. The divider between rows in
 
 ---
 
+### 1.6 Colour guidelines — Do / Don't
+
+Three recurring patterns summarise correct colour usage across Groww Invest. Each builds on the token tables in 1.2–1.3 — this section is the Do/Don't layer on top of them.
+
+#### Everyday colours (base tier)
+
+Most of the UI is built from `background` and `content` — the base tier. Surfaces step up in elevation with `backgroundSurfaceZ1` / `Z2`, while text and icons step down in emphasis with `contentPrimary` → `contentSecondary` → `contentTertiary`. Reach for `content++` (`contentAccent` / `contentPositive` / `contentNegative`) only when the colour itself is part of the message, not for decoration.
+
+| Background | Content |
+|-----------|---------|
+| `backgroundPrimary` | `contentPrimary` |
+| `backgroundSurfaceZ1` | `contentSecondary` |
+| `backgroundPrimary` | `contentPositive` |
+
+```
+HDFC Bank               → contentPrimary     (primary label)
+10 shares · Avg ₹1,580  → contentSecondary   (supporting sub-text)
++₹2,140.00              → contentPositive    (gain — colour is the message)
+```
+
+| | Guidance |
+|---|---------|
+| **Do** | Use `contentSecondary` for supporting text — it's a distinct token, not a faded primary. |
+| **Don't** | Don't fake hierarchy with opacity on `contentPrimary` — it breaks in dark mode and on coloured surfaces. Hierarchy is a token choice, never an opacity value. |
+
+#### Low emphasis colours (subtle tier)
+
+Subtle backgrounds (`backgroundAccentSubtle`, `backgroundPositiveSubtle`, `backgroundNegativeSubtle`, `backgroundWarningSubtle`) lift content slightly above the default `backgroundPrimary`, and the colour itself signals the nature of the message — positive, negative, warning, or accent. Every subtle background has a matching `contentOn*Subtle` token built for guaranteed contrast on top of it — always pull both from the same pairing (see the exclusivity rule in 1.3).
+
+| Background | Content |
+|-----------|---------|
+| `backgroundNegativeSubtle` | `contentOnNegativeSubtle` |
+| `backgroundPositiveSubtle` | `contentOnPositiveSubtle` |
+| `backgroundWarningSubtle` | `contentOnWarningSubtle` |
+
+```
+"Margin running low. Add funds..."         → backgroundWarningSubtle + contentOnWarningSubtle
+"Order failed — insufficient balance."     → backgroundNegativeSubtle + contentOnNegativeSubtle
+"KYC verified successfully."               → backgroundPositiveSubtle + contentOnPositiveSubtle
+```
+
+| | Guidance |
+|---|---------|
+| **Do** | Match the subtle background's role to the message — negative for errors, warning for caution, positive for success. |
+| **Don't** | Don't mix a subtle background with another role's `contentOn*Subtle` token (e.g. `backgroundNegativeSubtle` + `contentOnWarningSubtle`) — contrast is only guaranteed within the same pairing. |
+
+#### High emphasis colours (solid tier)
+
+High-emphasis backgrounds (`backgroundAccent`, `backgroundPositive`, `backgroundNegative`, `backgroundWarning`) are solid, saturated colours used in components to give content the highest possible level of emphasis — primary buttons, toasts, status chips. `contentOnColour` / `contentOnColourInverse` are a dedicated pair built to stay legible on top of them — never estimate a text colour here.
+
+| Background | Content |
+|-----------|---------|
+| `backgroundAccent` | `contentOnColour` |
+| `backgroundInversePrimary` | `contentOnColourInverse` |
+
+```
+Buy button                 → backgroundAccent + contentOnColour
+"Buy order executed" toast → backgroundInversePrimary + contentOnColourInverse
+```
+
+| | Guidance |
+|---|---------|
+| **Do** | Reserve high-emphasis backgrounds for the single highest-priority action or status on screen — a primary CTA, a toast, a status pill. |
+| **Don't** | Don't use a high-emphasis colour for body copy or large surface fills — it's calibrated for small, bounded components only. |
+
+---
+
 ## 2. Typography Rules
 
 ### 2.1 Typefaces
@@ -358,7 +482,7 @@ Two typefaces, each with a non-negotiable role:
 | Typeface | Role | Weight |
 |----------|------|--------|
 | **GrowwSans** | All body text, labels, supporting information, button labels | 400 (Regular), 500 (Medium/Heavy) |
-| **Sohne** | Screen headers, section titles, tab labels, bottom nav labels, prices, P/L amounts, any numerical anchor | 500 only — never any other weight |
+| **Sohne** | Screen headers, section titles, tab labels, prices, P/L amounts, any numerical anchor | 500 only — never any other weight |
 
 The distinction is not heading vs body — it is **structure + numbers vs content**. A stock price uses Sohne because it anchors the screen. A stock name in a list row uses GrowwSans because it is content.
 
@@ -373,7 +497,7 @@ The distinction is not heading vs body — it is **structure + numbers vs conten
 | `body-large` | 16px | 24px | 400 |
 | `body-large-heavy` | 16px | 24px | 500 |
 
-> `body-xsmall` (10px) is **not used** in Groww Invest. Do not use it for any element.
+> `body-xsmall` (10px) is **banned everywhere in Groww Invest, with one exception: bottom navigation labels.** Bottom nav labels use GrowwSans `body-xsmall`, not Sohne — they are content-scale chrome labels, not a numerical anchor. Do not reach for `body-xsmall` anywhere else.
 
 #### Heading scale (Sohne, weight 500)
 
@@ -385,6 +509,22 @@ The distinction is not heading vs body — it is **structure + numbers vs conten
 | `heading-small` | 16px | 24px | — |
 | `heading-base` | 18px | 28px | Default section header, screen anchor |
 | `heading-large` | 20px | 32px | — |
+
+#### Display scale (Sohne, weight 500)
+
+| Token | Size | Line height |
+|-------|------|-------------|
+| `display-small` | 24px | 32px |
+| `display-base` | 28px | 36px |
+| `display-large` | 32px | 40px |
+| `display-xlarge` | 40px | 48px |
+
+Display tokens are reserved for the single large numeric value a user is actively entering or editing — not for displaying a result. Two current Invest use cases:
+
+- **SIP order card** — the SIP amount the user is setting, as they type it.
+- **Add Money screen** — the amount the user is entering to add funds.
+
+Same constraint as heading tokens: **one display token per screen maximum** (see Hierarchy Rules in `typography-rules.md`). Never use a display token for a value that's merely being shown, not entered — that's still a `heading-base`/`heading-large` job (see §2.3's one-anchor-per-card rule).
 
 ---
 
@@ -539,6 +679,20 @@ Background → `backgroundSurfaceZ1`. Outer border → `borderPrimary`.
 | `backgroundSurfaceZ1` (card, sheet) | `borderPrimaryOnSurfaceZ1` |
 | `backgroundSurfaceZ2` (modal, nested card) | `borderPrimaryOnSurfaceZ2` |
 
+**Semantic border tokens — use sparingly, tied to real input/selection state, not decoration.**
+
+| Token | Use for |
+|-------|---------|
+| `borderNegative` | Input field in error state |
+| `borderWarning` | Input field in warning/caution state |
+| `borderNeutral` | Default outlined elements — input field resting state, selected pill |
+| `borderPositive` | Rarely used. Toasts/snackbars never use a border for success — use `backgroundPositiveSubtle` fill instead |
+| `borderAccent` | Rarely used. Filter chips use `borderNeutral` even when selected — never `borderAccent` |
+
+**`borderDataViz{Color}` tokens are scoped to charts only.** Use them for line-chart strokes, axes, and other data visualizations where a colored border/stroke is needed — never as a UI border for cards, inputs, or chips. The semantic border tokens above (`borderNegative`, `borderWarning`, etc.) are the correct choice for any non-chart colored border.
+
+**Dividers vs. card borders use the same token differently.** A divider between list rows is a single `border-bottom` — it separates items within one container. A card or container border is applied to all four edges — it encloses the surface. Never apply a full border where a divider is meant, or a single-edge border where a card needs to be visually contained.
+
 ### 3.4 Card corner radius
 
 Corner radius scales with card height:
@@ -575,6 +729,8 @@ Background  → backgroundDisabled
 Label/icon  → contentDisabled
 Border      → borderDisabled  (if the component has a border)
 ```
+
+**`contentDisabled` means the control can't be acted on — it is not a de-emphasis token.** Use it only when the element itself is non-interactive (a disabled button, a locked input, an unavailable toggle). Never reach for it just to make enabled text look quieter or lower-priority — that's what `contentTertiary` (or `contentSecondary`) is for.
 
 Never apply `alpha` / opacity on top of a disabled element. The token values already encode the correct visual weight.
 
@@ -677,6 +833,7 @@ The four live Invest tabs are **Stocks · F&O · Mutual Funds · Loans**. Use th
 
 - **5th slot:** when an Invest exploration adds a 5th tab, the most common choice is **More** (which routes to the all-products grid). Bonds, US Stocks, Gold, and FD are valid alternatives when the prototype is highlighting that product specifically.
 - **Bar is L0-only** — once the user enters any detail screen, the bar disappears.
+- **Tab label typography:** `body-xsmall` (GrowwSans) — see §2.1. This is the sole exception to the `body-xsmall` ban elsewhere in Invest.
 - **IA exploration** — Invest prototypes occasionally explore alternate IAs (e.g. portfolio-led, watchlist-led). The structural rules (3–5 tabs, typography, tokens, icon system) stay locked — only labels and order may change.
 
 ---
@@ -748,10 +905,28 @@ Complete token specs — typography and colour — for common Groww Invest UI pa
 
 ---
 
-## 7. Changelog
+## 7. Asset Sourcing
+
+**Every logo, icon, and font referenced by this document — or by any UI, prototype, or example built from it — MUST come from this project's own local folders. Never substitute an asset fetched from a remote URL, CDN, public icon marketplace, or a brand's own branding page, even temporarily.**
+
+- **Logos** → `./logos/` for brand logos (Groww Invest/Credit/Prime, W, 915), `./logos/banks/` for bank logos (e.g. `HDFCBANK.png`, `ICICIBANK.png`), `./logos/stocks/` for everything else — Indian and US stock tickers (see `design-system.md` § Stock Logos for the filename table). If a needed logo isn't in these folders yet, **stop and ask** — do not fetch a substitute.
+- **Icons** → the local `gh-standard-*` (or `gh-rounded-*` for W/915) icon-font classes only. Never an external icon CDN or an inline SVG copied from a website.
+- **Fonts** → the local Sohne and GrowwSans/Groww Sans Variable font files already wired into the CSS Starter Block. Never a Google Fonts link or any other remote `@font-face` URL.
+- **This rule travels with this document.** If this file (or any `.md` built on it) is handed to a different LLM/agent as a spec, that LLM must also resolve every asset reference against these same local folders — never substitute a fetched asset on the reader's behalf.
+
+---
+
+## 8. Changelog
 
 | Version | Date | Changes |
 |---------|------|---------|
+| `v0.40` | 12/11/2026 | Added §7 Asset Sourcing — logos/icons/fonts must only come from local project folders, never fetched remotely; documents the new `logos/banks/` split from `logos/stocks/`; renumbered Changelog to §8. |
+| `v0.39` | 11/11/2026 | Added Display scale table (§2.1) with values from `design-system.md` and two Invest use cases (SIP order card amount, Add Money amount entry); fixed bottom-nav-label typeface conflict — removed from Sohne's role list, documented as the sole exception to the `body-xsmall` ban (GrowwSans, §2.1 and §5.4). |
+| `v0.38` | 11/11/2026 | Clarified `contentAccentSecondary` qty rule: static qty stays plain text, a clickable Pro mode qty tag uses the Subtle-tier chip (`backgroundAccentSecondarySubtle` + `contentOnAccentSecondarySubtle`) instead — both valid, scoped by interactivity not instrument type. Added `contentOnAccentSecondarySubtle` to the §1.3 ContentOn-for-subtle-surfaces and exclusivity tables, which previously omitted it despite the token being implemented. |
+| `v0.37` | 11/11/2026 | Scoped the icon-steps-down rule to list items only; added Standard App Bar as a second exception (nav/action icon stays `contentPrimary`, matching the title) alongside the existing selected-bottom-nav-tab exception. |
+| `v0.36` | 11/11/2026 | Added `backgroundSurfaceDocked` (persistent chrome, same elevation tier as Z1) and semantically-correct-token-despite-matching-pixel-value rule; added overlay/scrim section (`backgroundOverlayPrimary` active, `backgroundOverlaySecondary` unused); added `contentAccentSecondary` qty-colour rule for F&O/Intraday/MTF signed quantities (never Delivery/CNC); added `backgroundAlwaysDark`/`backgroundAlwaysLight` background-counterpart rule; corrected icon colour rule — icon steps one level down from its label by default, with bottom-nav selected state as the sole exception (icon+label both `contentAccentSecondary`), plus unselected state (`contentTertiary`). |
+| `v0.35` | 11/11/2026 | md-sync audit fixes: §1.3 added `contentAlwaysDark`/`contentAlwaysLight` usage rule, `contentTertiary`-rarely-used note; §4.1 added `contentDisabled` nuance (non-interactive control, not de-emphasis); §3.3 added divider-vs-card-border distinction, semantic border token table (`borderNegative`/`borderWarning`/`borderNeutral`/`borderPositive`/`borderAccent`), and `borderDataViz{Color}` charts-only scoping. |
+| `v0.34` | 10/11/2026 | Added §1.6 Colour guidelines — Do/Don't: markdown mirror of the site's Colours → Guidelines tab (Everyday / Low emphasis / High emphasis colour blocks), with rationale, example token pairings, and Do/Don't tables, bringing the "markdown then HTML" source of truth in sync with index.html. |
 | `v0.33` | 14/05/2026 | Section 1.4 rewritten: replaced Hugeicons font system with GrowwHuge icon fonts; updated class prefix from `hgi-stroke hgi-{name}` to `gh-standard-{name}`; updated all icon examples. |
 | `v0.32` | 05/05/2026 | Section 5 restructured: removed duplicated component specs (now canonical in design-system.md 10.x), replaced with thin Invest application notes per component (5.1–5.7) explaining where/when to use each variant on Invest screens. |
 | `v0.31` | 04/05/2026 | Icon fix: class-based approach documented correctly; added never-reinvent-components rule; added button Do/Don't rule for inventing variants. |

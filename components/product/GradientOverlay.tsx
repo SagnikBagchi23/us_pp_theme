@@ -1,19 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from '@/constants/theme';
 
 interface GradientOverlayProps {
   heightPct: number;
   color: string;
+  backgroundColor: string;
 }
 
-export function GradientOverlay({ heightPct, color }: GradientOverlayProps) {
-  const { colors } = useTheme();
-
+export function GradientOverlay({ heightPct, color, backgroundColor }: GradientOverlayProps) {
   return (
     <LinearGradient
-      colors={[color, colors.backgroundPrimary]}
+      colors={[color, backgroundColor]}
       style={[StyleSheet.absoluteFillObject, { height: `${heightPct}%` }]}
       pointerEvents="none"
     />

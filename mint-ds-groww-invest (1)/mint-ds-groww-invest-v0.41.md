@@ -1,8 +1,8 @@
 # Mint Design System — Groww Invest
 
 > **Brand:** Groww Invest
-> **Version:** v0.19
-> **Downloaded:** 28 Sep, 2026
+> **Version:** v0.41
+> **Downloaded:** 17 Nov, 2026
 
 ---
 ## How to Use This Document
@@ -20,47 +20,58 @@ hues/green/light/08     color/brand/primary       backgroundPrimary
 
 ---
 
+## Asset Sourcing Policy
+
+**Fonts, icons, and logos referenced anywhere in this document — and in any UI, prototype, or code built from it — MUST be sourced only from this project's own local folders. Never download, fetch, or link an asset from a remote URL, CDN, icon marketplace, or a brand's own branding page as a substitute, even temporarily.** If an asset this document calls for isn't present locally, stop and ask rather than fetching a stand-in. See the CSS Starter Block below for font/icon paths and the Stock Logos section for logo paths.
+
+**This rule applies to any reader of this document, not just the original author.** If this `.md` is handed to a different LLM/agent as a spec, that LLM must resolve every font/icon/logo reference against the local paths documented here — never substitute a fetched asset on its own.
+
+**Agents must always use the local files in this project folder for fonts, icons, logos, alphabet glyphs, and any other asset.** Use the relative paths exactly as written (for example `./typography/`, `./icons/`, `./logos/`, `./icons/alphabet/`, `./assets/`). Do not rename, re-host, or replace them with remote copies. If a referenced file is missing from the folder, say so and ask the user to provide it.
+
+---
+
 ## CSS Starter Block
 
 **Every generated HTML prototype MUST include these two blocks verbatim inside `<head>`.** The first is a stylesheet link for icons, the second is the main style block for fonts and tokens.
 
 ```html
 <!-- 1. Icon stylesheet — MUST be included for icons to render -->
+<!-- All asset paths are LOCAL to the project — never reference the live mint-design-system.vercel.app URLs. -->
 <!-- Groww Invest / Credit / MF Prime → standard style -->
-<link rel="stylesheet" href="https://mint-design-system.vercel.app/icons/standard/groww-huge-standard.css">
+<link rel="stylesheet" href="./icons/standard/groww-huge-standard.css">
 <!-- W / 915 → rounded style (use this instead of the line above) -->
-<!-- <link rel="stylesheet" href="https://mint-design-system.vercel.app/icons/rounded/groww-huge-rounded.css"> -->
+<!-- <link rel="stylesheet" href="./icons/rounded/groww-huge-rounded.css"> -->
 
 <!-- 2. Fonts + tokens -->
 <style>
   @font-face {
     font-family: 'Sohne';
-    src: url('https://mint-design-system.vercel.app/typography/Sohne-Kraftig.otf') format('opentype');
+    src: url('./typography/Sohne-Kraftig.otf') format('opentype');
     font-weight: 500;
     font-display: swap;
   }
   @font-face {
     font-family: 'GrowwSans';
-    src: url('https://mint-design-system.vercel.app/typography/GrowwSans-Regular.otf') format('opentype');
+    src: url('./typography/GrowwSans-Regular.otf') format('opentype');
     font-weight: 400;
     font-display: swap;
   }
   @font-face {
     font-family: 'GrowwSans';
-    src: url('https://mint-design-system.vercel.app/typography/GrowwSans-Medium.otf') format('opentype');
+    src: url('./typography/GrowwSans-Medium.otf') format('opentype');
     font-weight: 500;
     font-display: swap;
   }
   @font-face {
     font-family: 'GrowwHugeStandard';
-    src: url('https://mint-design-system.vercel.app/icons/standard/groww-huge-standard.woff2') format('woff2'),
-         url('https://mint-design-system.vercel.app/icons/standard/groww-huge-standard.otf') format('opentype');
+    src: url('./icons/standard/groww-huge-standard.woff2') format('woff2'),
+         url('./icons/standard/groww-huge-standard.otf') format('opentype');
     font-display: swap;
   }
   @font-face {
     font-family: 'GrowwHugeRounded';
-    src: url('https://mint-design-system.vercel.app/icons/rounded/groww-huge-rounded.woff2') format('woff2'),
-         url('https://mint-design-system.vercel.app/icons/rounded/groww-huge-rounded.otf') format('opentype');
+    src: url('./icons/rounded/groww-huge-rounded.woff2') format('woff2'),
+         url('./icons/rounded/groww-huge-rounded.otf') format('opentype');
     font-display: swap;
   }
 
@@ -77,20 +88,26 @@ hues/green/light/08     color/brand/primary       backgroundPrimary
 
   /* ── Font utility classes ── */
   /* Body — GrowwSans */
+  .body-xsmall       { font-family: 'GrowwSans', sans-serif; font-weight: 500; font-size: 10px; line-height: 12px; }
   .body-small        { font-family: 'GrowwSans', sans-serif; font-weight: 400; font-size: 12px; line-height: 18px; }
   .body-small-heavy  { font-family: 'GrowwSans', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; }
   .body-base         { font-family: 'GrowwSans', sans-serif; font-weight: 400; font-size: 14px; line-height: 20px; }
   .body-base-heavy   { font-family: 'GrowwSans', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; }
   .body-large        { font-family: 'GrowwSans', sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; }
   .body-large-heavy  { font-family: 'GrowwSans', sans-serif; font-weight: 500; font-size: 16px; line-height: 24px; }
+  .body-xlarge       { font-family: 'GrowwSans', sans-serif; font-weight: 400; font-size: 18px; line-height: 28px; }
+  .body-xlarge-heavy { font-family: 'GrowwSans', sans-serif; font-weight: 500; font-size: 18px; line-height: 28px; }
   /* Headings — Sohne (weight 500 ONLY) */
   .heading-eyebrow   { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 10px; line-height: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .heading-xxsmall   { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; }
   .heading-xsmall    { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; }
   .heading-small     { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 16px; line-height: 24px; }
   .heading-base      { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 18px; line-height: 28px; }
   .heading-large     { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 20px; line-height: 32px; }
   .display-small     { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 24px; line-height: 32px; }
   .display-base      { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 28px; line-height: 36px; }
+  .display-large     { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 32px; line-height: 40px; }
+  .display-xlarge    { font-family: 'Sohne', sans-serif; font-weight: 500; font-size: 40px; line-height: 48px; }
 
   /* IconView wrapper */
   .mds-iconview { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; color: inherit; }
@@ -101,11 +118,52 @@ hues/green/light/08     color/brand/primary       backgroundPrimary
   .mds-iconview--large   { width: 24px; height: 24px; font-size: 24px; }
   .mds-iconview--xlarge  { width: 28px; height: 28px; font-size: 28px; }
 
-  /* ── Colour tokens — light mode ── */
+  /* ── Colour tokens — dark mode is the DEFAULT. Add data-mode="light" on <html> to opt into light mode. ── */
   :root {
+    --backgroundPrimary:        #060809;
+    --backgroundSurfaceZ1:      #151819;
+    --backgroundSurfaceZ2:      #1E2224;
+    --backgroundSecondary:      #151819;
+    --backgroundTertiary:       #1E2224;
+    --backgroundAccent:         #04B488;
+    --backgroundNegative:       #FF5E3B;
+    --backgroundPositive:       #04B488;
+    --backgroundWarning:        #E7A71E;
+    --backgroundAccentSubtle:   #0F251D;
+    --backgroundNegativeSubtle: #2C1711;
+    --backgroundPositiveSubtle: #0F251D;
+    --backgroundWarningSubtle:  #291F0E;
+    --backgroundDisabled:       #151819;
+    --backgroundTransparent:    transparent;
+    --borderPrimary:            #252A2C;
+    --borderAccent:             #04B488;
+    --borderNegative:           #FF5E3B;
+    --borderDisabled:           #1E2224;
+    --borderNeutral:            #F2F5F7;
+    --contentPrimary:           #F2F5F7;
+    --contentSecondary:         #989EA0;
+    --contentTertiary:          #696E70;
+    --contentDisabled:          #44494B;
+    --contentAccent:            #04B488;
+    --contentPositive:          #04B488;
+    --contentNegative:          #FF5E3B;
+    --contentWarning:           #E7A71E;
+    --contentOnColour:          #F2F5F7;
+    --contentOnAccentSubtle:    #46D5A7;
+    --contentOnPositiveSubtle:  #46D5A7;
+    --contentOnNegativeSubtle:  #FF9479;
+    --contentOnWarningSubtle:   #F5BC56;
+    --contentAccentSecondary:   #617BFF;
+    --borderWarning:            #E7A71E;
+    --backgroundInversePrimary: #F2F5F7;
+    --contentInversePrimary:    #060809;
+  }
+
+  /* ── Colour tokens — light mode override ── */
+  :root[data-mode="light"] {
     --backgroundPrimary:        #FFFFFF;
     --backgroundSurfaceZ1:      #FFFFFF;
-    --backgroundSurfaceZ2:      #F7F7F7;
+    --backgroundSurfaceZ2:      #FFFFFF;
     --backgroundSecondary:      #F7F7F7;
     --backgroundTertiary:       #EFF0F1;
     --backgroundAccent:         #04B488;
@@ -136,6 +194,10 @@ hues/green/light/08     color/brand/primary       backgroundPrimary
     --contentOnPositiveSubtle:  #00825C;
     --contentOnNegativeSubtle:  #D23A15;
     --contentOnWarningSubtle:   #A16B00;
+    --contentAccentSecondary:   #5669FF;
+    --borderWarning:            #E7A71E;
+    --backgroundInversePrimary: #353839;
+    --contentInversePrimary:    #FFFFFF;
   }
 </style>
 ```
@@ -194,19 +256,41 @@ The class prefix depends on the brand:
 
 ## Stock Logos
 
-Stock logos are hosted at a predictable URL. Use the filename from the table below — always match by stock name or ticker symbol.
+Stock logos live locally in the project. Use the filename from the table below — always match by stock name or ticker symbol. **Never fetch these from a remote URL, a CDN, or a company's own branding page — not even as a temporary stand-in.** If a required logo isn't in the table below, stop and ask rather than substituting a fetched asset.
 
 ```
-https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
+./logos/stocks/{FILENAME}      ← Indian stock tickers, Groww, Amazon, Google, Berkshire, Broadcom, Meta, TSMC
+./logos/us_logos/{FILENAME}    ← US stock tickers: AAPL, MSFT, NVDA, TSLA
+./logos/banks/{FILENAME}       ← bank logos only (see table below)
 ```
 
-**Available logos — use the exact filename shown:**
+**Bank logos — `./logos/banks/{FILENAME}`:**
+
+| Company name | Ticker | Filename |
+|-------------|--------|---------|
+| Axis Bank | AXISBANK | `AXISBANK.png` |
+| HDFC Bank | HDFCBANK | `HDFCBANK.png` |
+| ICICI Bank | ICICIBANK | `ICICIBANK.png` |
+| Kotak Mahindra Bank | KOTAKBANK | `KOTAKBANK.png` |
+| Punjab National Bank | PNB | `PNB.png` |
+| State Bank of India | SBIN | `SBIN.png` |
+| Yes Bank | YESBANK | `YESBANK.png` |
+
+**US stocks — `./logos/us_logos/{FILENAME}`:**
+
+| Company name | Ticker | Filename |
+|-------------|--------|---------|
+| Apple | AAPL | `AAPL.png` |
+| Microsoft | MSFT | `MSFT.png` |
+| NVIDIA | NVDA | `NVDA.png` |
+| Tesla | TSLA | `TSLA.png` |
+
+**Everything else — `./logos/stocks/{FILENAME}`:**
 
 | Company name | Ticker | Filename |
 |-------------|--------|---------|
 | Asian Paints | ASIANPAINT | `ASIANPAINT.png` |
 | Aurobindo Pharma | AUROPHARMA | `AUROPHARMA.png` |
-| Axis Bank | AXISBANK | `AXISBANK.png` |
 | Bajaj Auto | BAJAJAUTOLS | `BAJAJAUTOLS.png` |
 | Bajaj Finance | BAJFINANCE | `BAJFINANCE.png` |
 | Bharti Airtel | BHARTIARTL | `BHARTIARTL.png` |
@@ -223,9 +307,7 @@ https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
 | Grasim Industries | GRASIM | `GRASIM.png` |
 | Groww | — | `GROWW.png` |
 | HCL Technologies | HCLTECH | `HCLTECH.png` |
-| HDFC Bank | HDFCBANK | `HDFCBANK.png` |
 | Hindustan Unilever | HINDUNILVR | `HINDUNILVR.png` |
-| ICICI Bank | ICICIBANK | `ICICIBANK.png` |
 | Infosys | INFY | `INFY.png` |
 | IRFC | IRFC | `IRFC.png` |
 | ITC | ITC | `ITC.png` |
@@ -233,7 +315,6 @@ https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
 | JK Tyre | JKTYRE | `JKTYRE.png` |
 | JSW Steel | JSWSTEEL | `JSWSTEEL.png` |
 | Kalyan Jewellers | KALYANKJIL | `KALYANKJIL.png` |
-| Kotak Mahindra Bank | KOTAKBANK | `KOTAKBANK.png` |
 | LIC | LICI | `LICI.png` |
 | Larsen & Toubro | LT | `LT.png` |
 | Lupin | LUPIN | `LUPIN.png` |
@@ -244,10 +325,8 @@ https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
 | NTPC | NTPC | `NTPC.png` |
 | Nuvama | NUVAMA | `NUVAMA.png` |
 | ONGC | ONGC | `ONGC.png` |
-| Punjab National Bank | PNB | `PNB.png` |
 | Power Grid | POWERGRID | `POWERGRID.png` |
 | Reliance Industries | RELIANCE | `RELIANCE.png` |
-| State Bank of India | SBIN | `SBIN.png` |
 | Shriram Finance | SHRIRAM | `SHRIRAM.png` |
 | Siemens | SIEMENS | `SIEMENS.png` |
 | Star Health | STAR | `STAR.png` |
@@ -260,11 +339,15 @@ https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
 | UltraTech Cement | ULTRACEMCO | `ULTRACEMCO.png` |
 | Vedanta | VEDANTA | `VEDANTA.png` |
 | Wipro | WIPRO | `WIPRO.png` |
-| Yes Bank | YESBANK | `YESBANK.png` |
 | Zydus Lifesciences | ZYDUSLIFE | `ZYDUSLIFE.png` |
 | Amazon | — | `amazon.png` |
+| Alphabet / Google | GOOGL | `google.png` |
+| Berkshire Hathaway | BRKB | `BRKB.png` |
+| Broadcom | AVGO | `AVGO.png` |
+| Meta | META | `META.png` |
+| TSMC | TSM | `TSM.png` |
 
-**Rule:** Always look up the company in this table first. Use the exact filename. For any stock not in this table, show the avatar fallback.
+**Rule:** Always look up the company in the matching table first (banks, US stocks, or everything else), and use the matching folder. Use the exact filename. For any stock not in these tables, show the avatar fallback.
 
 **Stock name vs ticker rule:** Always display the full company name as the primary label. Ticker symbols are rarely shown; when they are, they always appear alongside the full name — never alone.
 
@@ -274,18 +357,22 @@ https://mint-design-system.vercel.app/logos/stocks/{FILENAME}
 ✗  RELIANCE                     (ticker alone — never)
 ```
 
-**Fallback — stock not in the table:** Show an avatar with the first 2 characters of the ticker in a 40×40px rounded square (border-radius: 8px), `backgroundTertiary` fill, `contentSecondary` text, `body-small-heavy`.
+**Fallback — stock not in the table:** Use the company alphabet glyph (`icons/alphabet/{L}.svg`, where `{L}` is the first letter of the **company name**, not the ticker) inside a company avatar square, on the DataViz subtle fill for that letter. Do not use initials, which read as a person. The full rule is in §10.7 Company avatar. Example: "Mahindra & Mahindra" with no table entry → `M` alphabet glyph.
 
 ```html
-<!-- Stock logo — always include onerror fallback -->
-<img src="https://mint-design-system.vercel.app/logos/stocks/RELIANCE.png"
+<!-- Stock logo — always a LOCAL relative path, never a remote URL; always include onerror fallback -->
+<!-- The fallback example is M (Mahindra & Mahindra), mint-green band. See the §10.7 alphabet table. -->
+<img src="./logos/stocks/RELIANCE.png"
      style="width:40px; height:40px; border-radius:8px; object-fit:contain;"
      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
      alt="Reliance Industries" />
-<div style="display:none; width:40px; height:40px; border-radius:8px;
-            background:var(--backgroundTertiary); align-items:center; justify-content:center;
-            font-family:'GrowwSans',sans-serif; font-size:12px; font-weight:500;
-            color:var(--contentSecondary);">RI</div>
+<div class="mds-avatar mds-avatar--company mds-avatar--sm mds-avatar--icon mds-avatar--dv-mint-green" style="display:none;">
+  <span class="mds-avatar__glyph" style="--glyph-src:url(icons/alphabet/M.svg)" aria-hidden="true"></span>
+</div>
+<!-- Bank logo — same pattern, but from ./logos/banks/ -->
+<img src="./logos/banks/HDFCBANK.png" style="width:40px; height:40px; border-radius:8px; object-fit:contain;"
+     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+     alt="HDFC Bank" />
 ```
 
 ---
@@ -451,24 +538,26 @@ Greyscale scale used for surfaces, text, borders, and UI structure. Steps 1–12
 
 | Step | Token | Light | Dark |
 |------|-------|-------|------|
-| 1  | `neutrals/light/1`  | `#FFFFFF` | `#060809` |
-| 2  | `neutrals/light/2`  | `#F7F7F7` | `#151819` |
-| 3  | `neutrals/light/3`  | `#EFF0F1` | `#1E2224` |
-| 4  | `neutrals/light/4`  | `#E7E8E9` | `#252A2C` |
-| 5  | `neutrals/light/5`  | `#E0E1E2` | `#2D3133` |
-| 6  | `neutrals/light/6`  | `#D8D9DA` | `#363B3D` |
-| 7  | `neutrals/light/7`  | `#CDCECF` | `#44494B` |
-| 8  | `neutrals/light/8`  | `#BABBBC` | `#5C6164` |
-| 9  | `neutrals/light/9`  | `#898C8E` | `#696E70` |
-| 10 | `neutrals/light/10` | `#7F8283` | `#989EA0` |
-| 11 | `neutrals/light/11` | `#626465` | `#B5BBBD` |
-| 12 | `neutrals/light/12` | `#353839` | `#F2F5F7` |
+| 1  | `new-neutrals/light/1`  | `#FFFFFF` | `#060809` |
+| 2  | `new-neutrals/light/2`  | `#F7F7F7` | `#151819` |
+| 3  | `new-neutrals/light/3`  | `#EFF0F1` | `#1E2224` |
+| 4  | `new-neutrals/light/4`  | `#E7E8E9` | `#252A2C` |
+| 5  | `new-neutrals/light/5`  | `#E0E1E2` | `#2D3133` |
+| 6  | `new-neutrals/light/6`  | `#D8D9DA` | `#363B3D` |
+| 7  | `new-neutrals/light/7`  | `#CDCECF` | `#44494B` |
+| 8  | `new-neutrals/light/8`  | `#BABBBC` | `#5C6164` |
+| 9  | `new-neutrals/light/9`  | `#898C8E` | `#696E70` |
+| 10 | `new-neutrals/light/10` | `#7F8283` | `#989EA0` |
+| 11 | `new-neutrals/light/11` | `#626465` | `#B5BBBD` |
+| 12 | `new-neutrals/light/12` | `#353839` | `#F2F5F7` |
 
 ---
 
 ## 3. Colour Roles
 
 Semantic alias tokens that map primitives to an intent. Never reference primitives directly in components — use these instead. Values shown as `role → primitive reference`.
+
+> **Hover and Pressed are intentionally identical.** Across every role below (Positive/Negative/Warning, and the Accent tokens in §4.1), the `*Hover` and `*Pressed` variants of the same base/subtle token always resolve to the same primitive step. This is not a documentation gap — there is no separate "pressed-darker" step in this palette; hover and press share one interaction-state value.
 
 ### 3.1 Positive · _green_
 
@@ -604,6 +693,8 @@ Semantic alias tokens that map primitives to an intent. Never reference primitiv
 Raw color values for charts, graphs, and data visualization. Each color family has three variants: `emphasis` (high contrast, for labels/lines), `base` (the core chart color), and `subtle` (low-opacity background tint).
 
 Token format: `dataViz-{color}` · `dataViz-{color}-emphasis` · `dataViz-{color}-subtle`
+
+> **`base` is identical in light and dark mode** at both this primitive layer and the semantic use-case layer (`backgroundDataViz{Color}`, `contentDataViz{Color}`, `borderDataViz{Color}` in §6.10) — the chart's core color must stay recognizable regardless of mode. Only `emphasis` and `subtle` shift per mode.
 
 | Color | Variant | Light | Dark |
 |-------|---------|-------|------|
@@ -784,6 +875,8 @@ Use-case tokens for text, icons, and all content elements.
 
 Text used on top of coloured surfaces (subtle backgrounds).
 
+> **`contentOnColour` is not mode-dependent in practice.** It's defined as a neutral alias (`new-neutrals/light/1` in light, `new-neutrals/dark/12` in dark), but its purpose is to stay legible on a solid, high-emphasis brand/semantic background (e.g. a filled Primary button) — a context that itself doesn't flip with mode. Treat it as effectively a fixed "white-ish in light, near-white in dark" value for on-colour text/icons, not as a token that needs per-mode re-evaluation the way surface tokens do.
+
 | Token | Light ref | Dark ref |
 |-------|-----------|----------|
 | `contentOnColour` | `new-neutrals/light/1` | `new-neutrals/dark/12` |
@@ -846,7 +939,7 @@ Token definitions for the Mint type system. Usage rules, hierarchy guidelines, a
 
 | Typeface | File | Role | Weights |
 |----------|------|------|---------|
-| **Sohne** | `Sohne-Kraftig.otf` | Headings · Display · numeric values | 500 only |
+| **Sohne** | `Sohne-Kraftig.otf` | Headings · Display · hero numerals (numbers in lists, inputs, pills and chips use body tokens) | 500 only |
 | **Groww Sans** | `GrowwSans-Regular.otf` / `GrowwSans-Medium.otf` | Body text | 400 · 500 |
 
 ---
@@ -927,7 +1020,7 @@ All three types share the same token system, trailing content options, and sizin
 
 | Zone | Contents |
 |------|---------|
-| **Leading** | Icon (20×20px) or thumbnail — text list item has none |
+| **Leading** | Icon or thumbnail, at the size set in Element sizes — text list item has none. A thumbnail is a circle for a person and a square for a company (§10.7) |
 | **Middle** | Primary label + optional sub-text, stacked |
 | **Trailing** | Value labels, icon, button, icon-button, or none |
 | **Divider** | Horizontal rule below the row; indented to align with label start |
@@ -951,43 +1044,57 @@ Key rules:
 - Trailing value is **always** medium weight (`body-base-heavy`) regardless of its colour.
 - A coloured sub-text escalates from `body-small` to `body-small-heavy`. Regular weight is not allowed with a semantic colour.
 - Gap between primary label and sub-text: **2px**.
+- Label and sub-text together are 40px tall (20px label + 2px gap + 18px sub-text). A thumbnail row with sub-text is 72px at Default spacing, and a thumbnail row without sub-text is 64px.
 
 #### Spacing and padding
 
 | Property | Value |
 |----------|-------|
-| Container padding (all sides) | 16px |
+| Container padding, vertical (top and bottom) | 12px |
+| Container padding, horizontal (left and right) | 16px |
 | Gap between leading graphic and middle frame | 16px |
 | Gap between primary label and sub-text | 2px |
-| Leading icon size | 20×20px |
+
+#### Element sizes
+
+Leading and trailing elements each have their own size variant. The trailing element size is independent of the leading element size.
+
+| Element | Small | Medium (default) | Large |
+|---------|-------|------------------|-------|
+| Icon (leading or trailing) | 16×16px | 20×20px | 24×24px |
+| Thumbnail — avatar, image, contained icon (leading or trailing) | 32×32px | 40×40px | 48×48px |
+
+- The default thumbnail is 40×40px. Thumbnail sizes match the avatar sizes in §10.7 (small, medium, large).
+- Thumbnail shape follows what it shows, using the same rule as §10.7. A person (photo or initials) is a **circle**. A company is a **square** with 8px radius. Companies include stocks, US stocks, mutual funds, ETFs, bonds, F&O contracts, IPOs and NFOs, so their logo or alphabet glyph is always a square. Never use a circle for a logo, even when the logo mark is round.
+- The trailing icon uses the same icon sizes as the leading icon. Trailing icon buttons (§10.5) keep their own fixed size.
 
 #### Heights by variant
 
 **Text list item and Icon list item**
 
-| Size | Spacing | Sub-text | Height |
+| Row variant | Spacing | Sub-text | Height |
 |------|---------|----------|--------|
 | Default | Default | Yes | 72px |
-| Default | Default | No | 64px |
+| Default | Default | No | 56px |
 | Default | Compact | Yes | 56px |
 | Default | Compact | No | 48px |
-| Large | Default | Yes | 76px |
-| Large | Default | No | 64px |
-| Large | Compact | Yes | 60px |
-| Large | Compact | No | 48px |
+| Tall | Default | Yes | 76px |
+| Tall | Default | No | 64px |
+| Tall | Compact | Yes | 60px |
+| Tall | Compact | No | 48px |
 
 **Thumbnail list item**
 
-| Size | Spacing | Sub-text | Height |
+| Row variant | Spacing | Sub-text | Height |
 |------|---------|----------|--------|
 | Default | Default | Yes | 72px |
 | Default | Default | No | 64px |
 | Default | Compact | Yes | 64px |
 | Default | Compact | No | 56px |
-| Large | Default | Yes | 80px |
-| Large | Default | No | 72px |
-| Large | Compact | Yes | 72px |
-| Large | Compact | No | 64px |
+| Tall | Default | Yes | 80px |
+| Tall | Default | No | 72px |
+| Tall | Compact | Yes | 72px |
+| Tall | Compact | No | 64px |
 
 #### Trailing content options
 
@@ -1003,13 +1110,13 @@ Key rules:
 
 #### Divider
 
-Optional (`divider: boolean`). When shown, inset to align with the start of label text — not flush with the screen edge.
+Optional (`divider: boolean`). When shown, the divider's **left edge insets to align with the start of label text** (never full-bleed from the screen/card edge) — its **right edge stays flush** to the row's right edge.
 
 | Type | Divider left indent |
 |------|-------------------|
 | Text list item | 16px |
-| Icon list item | 52px (16px padding + 20px icon + 16px gap) |
-| Thumbnail list item | Varies by thumbnail size |
+| Icon list item | 16px padding + leading icon width + 16px gap (52px at medium 20px icon) |
+| Thumbnail list item | 16px padding + leading thumbnail width + 16px gap (72px at medium 40px thumbnail) |
 
 Use `borderPrimary` on `backgroundPrimary`, or `borderPrimaryOnSurfaceZ1` if the list is inside a card.
 
@@ -1017,11 +1124,11 @@ Use `borderPrimary` on `backgroundPrimary`, or `borderPrimaryOnSurfaceZ1` if the
 
 - **Default spacing** is the standard. Use on all list items unless there is a specific reason to compress.
 - **Compact spacing** is for dense data tables or secondary lists only. Use sparingly.
-- **Large size** when the row needs more visual weight (hero or prominent lists).
+- **Tall row variant** when the row needs more visual weight (hero or prominent lists). Tall rows are a row variant, not an element size: the leading and trailing elements still use the Element sizes table.
 
 #### Tap behaviour and feedback
 
-- **List rows are tappable by default.** A row is interactive unless explicitly marked as display-only. The presence of a chevron is a visual hint, not the rule that determines tappability.
+- **List rows are tappable by default.** A row is interactive unless explicitly marked as display-only. The presence of a chevron is a visual hint, not the rule that determines tappability — any trailing content option (`labels`, `text-button`, `button`, `icon-button`, even `none`) can sit on a tappable row. The only exception is an embedded interactive control (`button`/`icon-button`/`text-button`): tapping that control fires its own action and must not also trigger the row's tap action.
 - **Pressed state:** when a tappable row is pressed, the row background changes to `backgroundSecondary` as transient touch feedback. Display-only rows have no pressed state.
 
 #### Truncation rule
@@ -1103,7 +1210,7 @@ The four live tabs today are: **Stocks · F&O · Mutual Funds · Loans**. Defaul
 | Product name | `heading-base` — Sohne 500, 18px/28px | `contentPrimary` |
 | Action icons | — | `contentPrimary` |
 
-**Brand-specific logo.** The 24×24px logo is brand-specific — Groww Invest uses the Invest logo, 915 uses the 915 logo, W uses the W logo. Use the appropriate logo asset from `mint-design-system.vercel.app/logos/` for the brand the prototype represents.
+**Brand-specific logo.** The 24×24px logo is brand-specific — Groww Invest uses the Invest logo, 915 uses the 915 logo, W uses the W logo. Use the appropriate logo asset from the local `./logos/` folder for the brand the prototype represents — never fetch this from a remote URL.
 
 #### Standard App Bar
 
@@ -1156,7 +1263,7 @@ Title is single-line and truncates with ellipsis — never wraps.
 |---------|------------|
 | None | Purely navigational screen, no contextual actions |
 | 1–3 icons | Standard contextual actions (search, filter, share, more) |
-| 4+ icons (overflow) | Show the first 2 actions in their slots; the 3rd slot becomes a more-vertical (`gh-standard-more-vertical`) icon that opens a sheet/menu containing the remaining actions |
+| 4+ icons (overflow) | Show the first 2 actions in their own slots. The 3rd slot becomes a more-vertical (`gh-standard-more-vertical`) icon that opens a sheet/menu — **every action from the 3rd onward** (not just the literal 3rd) moves into that sheet/menu, in their original order |
 | Text button | A single text-only CTA in the action zone |
 | Secondary button | A single outlined button in the action zone |
 
@@ -1190,10 +1297,10 @@ The persistent navigation bar at the bottom of every L0 product screen. **3 to 5
 
 | Element | Active | Inactive |
 |---------|--------|----------|
-| **Label** | Sohne 500, 10px, line-height 1.2, mixed case · `contentAccentSecondary` | Sohne 500, 10px, line-height 1.2, mixed case · `contentTertiary` |
+| **Label** | `body-small-heavy` — GrowwSans 500, 12px/18px, mixed case · `contentAccentSecondary` | `body-small-heavy` — GrowwSans 500, 12px/18px, mixed case · `contentTertiary` |
 | **Icon** | Filled (solid) variant · `contentAccentSecondary` | Outline (stroke) variant · `contentTertiary` |
 
-> **Typography exception.** The label uses **Sohne 500 at 10px**, mixed case (e.g. "Mutual funds", not "MUTUAL FUNDS"). This is **not** the `heading-eyebrow` token (which is 10px Sohne *all-caps*). The bottom nav is the only place this 10px mixed-case Sohne style is used — it's an intentional exception to the type scale, kept for visual density and legibility at small sizes. Do not replicate this style elsewhere.
+The label uses the `body-small-heavy` token (GrowwSans 500, 12px/18px), mixed case (e.g. "Mutual funds", not "MUTUAL FUNDS") — not `heading-eyebrow` (which is 10px Sohne *all-caps*).
 
 #### Live tabs (default)
 
@@ -1231,7 +1338,7 @@ The four live tabs + 5th-slot rule is the **default**, not the only option. When
 | Tab labels | Live 4 + curated 5th-slot list | **Any label is allowed** — Home, Explore, Holdings, Watchlist, Profile, Activity, anything |
 | Tab order | Stocks → F&O → Mutual funds → Loans, fixed | **Any order**, designer's call |
 | Number of tabs | 3–5 | 3–5 (this constraint stays) |
-| Typography | Sohne 500, 10px, mixed case | Same — do not change |
+| Typography | `body-small-heavy` — GrowwSans 500, 12px/18px, mixed case | Same — do not change |
 | Icon system | `gh-standard-{name}` (Invest/Credit/Prime) · `gh-rounded-{name}` (W/915) | Same — pick any icon from the brand's icon font |
 | Active/inactive tokens | `contentAccentSecondary` / `contentTertiary` | Same |
 | Container, height, structure | 64px bar, equal-flex columns, top border | Same |
@@ -1290,10 +1397,10 @@ No visual exploration marker is required — the prototype itself signals intent
   height: 24px;
 }
 .mds-bottom-nav__label {
-  font-family: 'Sohne', sans-serif;
+  font-family: 'GrowwSans', sans-serif;
   font-weight: 500;
-  font-size: 10px;
-  line-height: 1.2;
+  font-size: 12px;
+  line-height: 18px;
   text-align: center;
   white-space: nowrap;
 }
@@ -1329,7 +1436,7 @@ To swap tabs, change the icon class and label text. Mark the active tab with `md
 #### Behaviour rules
 
 - **Tap target = full slot.** The entire `(bar width ÷ N tabs) × 64px` rectangle is tappable, not just the icon+label area. Do not shrink the tap area.
-- **Labels never truncate.** If a label doesn't fit on one line at Sohne 500 / 10px, the label is wrong — pick a shorter word. Never add ellipsis, never wrap, never shrink the type.
+- **Labels never truncate.** If a label doesn't fit on one line at `body-small-heavy` (GrowwSans 500 / 12px), the label is wrong — pick a shorter word. Never add ellipsis, never wrap, never shrink the type.
 - **Bar visibility:** present on **L0 (root product) screens only**. Hidden on L1+ screens (detail pages, flows, sheets, settings). Once the user enters any non-root screen, the bar is gone.
 - **L0 app bar title = active tab label, exactly.** When the user is on the Stocks tab, the L0 app bar reads "Stocks". Switch tabs → app bar title switches in lockstep. This is a **strict 1:1 mapping** that applies to all 4 live tabs, all 5 fallback options (Bonds, US Stocks, Gold, FD, More), and any IA-exploration tabs. There is no decoupling.
 
@@ -1356,7 +1463,15 @@ To swap tabs, change the icon class and label text. Mark the active tab with `md
 
 ### 10.5 Buttons
 
-Three base variants — Primary, Secondary, Tertiary — with sizes, states, and sub-variants. All button labels use **GrowwSans** (body tokens). Never Sohne.
+Three base variants — Primary, Secondary, Tertiary — with sizes, states, and sub-variants. All button labels use **GrowwSans Medium** (body tokens). Never Sohne.
+
+#### Anatomy
+
+| Part | Spec |
+|------|------|
+| **Container** | The tappable fill or outline; carries the variant's emphasis level. Corner radius: **8px** on all sizes and variants. |
+| **Label** | Always GrowwSans Medium; size scales with the button's size (see Sizes table). |
+| **Leading / trailing icon** | Optional, never both at once. Leading = context, trailing = outcome or navigation. |
 
 #### Variants
 
@@ -1365,37 +1480,43 @@ Three base variants — Primary, Secondary, Tertiary — with sizes, states, and
 | **Primary** | `backgroundAccent` | `contentOnColour` | none | Main CTA — Buy, Invest, Confirm |
 | **Primary Negative** | `backgroundNegative` | `contentOnColour` | none | Destructive — Sell, Remove, Exit |
 | **Secondary** | transparent | `contentPrimary` | `borderPrimary` | Secondary — Cancel, Skip, Back |
-| **Secondary Accent** | `backgroundAccentSubtle` | `contentOnAccentSubtle` | `borderAccent` | Accent secondary — Know More, Compare |
+| **Secondary Negative** | transparent | `contentNegative` | `borderNegative` | Secondary destructive — Cancel-style pair for a Primary Negative, or a less important destructive action |
+| **Secondary Accent** | `backgroundPositiveSubtle` | `contentOnPositiveSubtle` | none | Accent secondary — Know More, Compare |
 | **Tertiary** | none | `contentPrimary` | none | Low priority — inline text actions |
+| **Tertiary Compact** | none | `contentPrimary` | none | Inline text action inside dense text or a table. Outside button groups only |
 | **Tertiary Accent** | none | `contentAccent` | none | Accent inline links — View All |
+
+> **Accent is a toggle on Secondary and Tertiary.** Turning Accent on swaps the neutral colors for the accent colors on the same button (Secondary becomes Secondary Accent, Tertiary becomes Tertiary Accent). Tertiary Compact is its own variant. The live site's Buttons playground shows the same toggle.
+
+> **Tertiary / Tertiary Accent render a dashed underline, not a plain text link.** The label gets `border-bottom: 1px dashed contentSecondary` (Tertiary) or `1px dashed contentAccent` (Tertiary Accent) — never a solid underline, and never no underline. On hover/pressed, the label colour changes to **`contentSecondary`** (`--text-secondary`) instead of a background-fill change, since Tertiary has no container fill to shift. Opacity is never used on buttons.
 
 #### Sizes
 
-| Size | Height | Label token | When to use |
-|------|--------|-------------|-------------|
-| **Large** | 48px | `body-large-heavy` | Full-width bottom CTA — Buy, Sell |
-| **Medium** | 40px | `body-base-heavy` | Default — most buttons |
-| **Small** | 32px | `body-small-heavy` | Tight layouts — inline row actions |
+| Size | Height | Label token | Icon size | When to use |
+|------|--------|-------------|-----------|-------------|
+| **Large** | 48px | `body-large-heavy` | 24px | Full-width bottom CTA — Buy, Sell |
+| **Medium** | 40px | `body-base-heavy` | 20px | Default — most buttons |
+| **Small** | 32px | `body-small-heavy` | 16px | Tight layouts — inline row actions |
 
-Corner radius: **8px** on all sizes and variants.
+Corner radius: **8px** on all sizes and variants. Icon size is fixed per button size — never resize an icon independently of its button's size.
 
 #### States
 
 | State | Behaviour |
 |-------|-----------|
 | **Enabled** | Variant tokens above |
-| **Hover** | `backgroundAccentBaseHover` (primary) · `backgroundNegativeHover` (negative) |
-| **Pressed** | `backgroundAccentBaseSelected` (primary) · `backgroundNegativePressed` (negative) |
+| **Hover** | `backgroundAccentHover` (primary) · `backgroundNegativeHover` (negative) · `backgroundTransparentHover` (secondary, secondary negative) |
+| **Pressed** | `backgroundAccentSelected` (primary) · `backgroundNegativePressed` (negative) · `backgroundTransparentPressed` (secondary, secondary negative) |
 | **Disabled** | `backgroundDisabled` · `contentDisabled` · `borderDisabled` (secondary only) |
-| **Loading** | Label hidden; spinner centred in its place. Button width stays fixed (does not collapse to icon-only). Spinner colour matches the original label colour. |
+| **Loading** | Label hidden; spinner centred in its place. Button width stays fixed (does not collapse to icon-only). Spinner colour matches the original label colour; for Tertiary the spinner uses `contentPrimary`. The button is **disabled for taps** while loading — a second tap is never accepted. |
 
-For Secondary and Tertiary interaction states, the fill comes from transparent interaction tokens; border and label colours remain unchanged on interaction.
+For Secondary and Secondary Negative, hover and pressed use the transparent interaction tokens (`backgroundTransparentHover`, `backgroundTransparentPressed`) as the fill, the same as Primary's interaction tokens. Border and label colours remain unchanged. Tertiary variants have no fill and change only the label colour (see the dashed underline note below).
 
-**Disabled applies to all variants identically** — including Tertiary and Tertiary Accent, which take the same `backgroundDisabled` fill in disabled state (they are NOT transparent when disabled). Never use opacity to fake a disabled state — always swap to the disabled tokens.
+**Disabled applies per variant's own container type, not a single shared rule.** Primary, Primary Negative, and Secondary swap to `backgroundDisabled` · `contentDisabled` · `borderDisabled` (secondary only) — their fill/border change. **Tertiary and Tertiary Accent stay transparent (no container fill) in disabled state** — only their label colour swaps to `contentDisabled`; they never pick up `backgroundDisabled`, since they have no container fill to begin with. Never use opacity to fake a disabled state — always swap to the disabled tokens for the parts that variant actually has.
 
 #### Width
 
-Buttons **default to flex** in their container — they grow to fit the available width within row/grid layout primitives.
+Buttons **default to flex** in their container — they grow to fit the available width within row/grid layout primitives. In a horizontal group every button takes `flex: 1`.
 
 | Size | Default behaviour |
 |------|-------------------|
@@ -1409,17 +1530,16 @@ Designers should not override these defaults without a clear reason. Large butto
 
 > Icon-only button variant is **not yet specified** — to be added in a future release. Until then, do not invent an icon-only button. Use the existing label+icon variants or the IconView component for standalone icon affordances.
 
-#### Tertiary compact mode
+#### Tertiary compact
 
-`isCompact=true` removes container padding:
+Tertiary Compact is its own variant (`tertiary-compact`). It removes container padding and is used for inline actions inside dense text or tables.
 
 | Base size | Compact height |
 |-----------|---------------|
 | Small (32px) | 24px |
-| Medium (40px) | 24px |
 | Large (48px) | 32px |
 
-Use compact tertiary for actions embedded inline within text or dense table cells.
+Only Tertiary Compact uses compact heights. **Inside a button group, a Tertiary button is never compact** — use the standard size there.
 
 #### Icons on buttons
 
@@ -1432,14 +1552,18 @@ Use compact tertiary for actions embedded inline within text or dense table cell
 #### Button groups
 
 **Horizontal layout:**
-- Primary on the **right**, Secondary on the left
-- Never truncate labels to fit — switch to vertical layout if labels are long
+- **2 buttons:** Primary on the **right**, Secondary on the left. A Secondary Accent or Secondary Negative may sit on the left too, and a Primary Negative may sit on the left, as long as the pair follows its own pattern (see Destructive pairs)
+- **3 buttons:** left → right order is **Tertiary → Secondary → Primary** (Primary stays rightmost, Tertiary is always leftmost/lowest-emphasis)
+- In a horizontal group, each button is full width of its own slot (`flex: 1`); the slots share the row equally
+- **Never wrap or truncate labels.** Labels have no maximum length; if a horizontal row cannot fit them, switch to vertical layout
 
 **Vertical layout:**
 - Primary at the **top**, order: Primary → Secondary → Tertiary
+- Each button is full width of the container in vertical layout
 
 ```
-Horizontal:   [ Secondary ]  [ Primary ]
+Horizontal (2):   [ Secondary ]  [ Primary ]
+Horizontal (3):   [ Tertiary ]  [ Secondary ]  [ Primary ]
 Vertical:     [ Primary           ]
               [ Secondary         ]
               [ Tertiary          ]
@@ -1450,6 +1574,7 @@ Vertical:     [ Primary           ]
 ```
 Main action on the screen?               → Primary
 Destructive action (sell, remove)?       → Primary Negative
+Secondary destructive action?            → Secondary Negative
 Supporting action alongside primary?     → Secondary
 Brand-positive secondary action?         → Secondary Accent
 Low-priority or inline link?             → Tertiary
@@ -1457,7 +1582,7 @@ Accent-coloured inline link?             → Tertiary Accent
 Full-width bottom CTA (buy/sell flow)?   → Large
 Most buttons?                            → Medium (default)
 Tight space or row-level action?         → Small
-Inline within dense text or table?       → Tertiary Compact
+Inline within dense text or table?       → Tertiary Compact (outside button groups only)
 ```
 
 #### Do / Don't
@@ -1474,7 +1599,13 @@ Inline within dense text or table?       → Tertiary Compact
 ✗  Never add opacity to disabled — use disabled tokens only
 ✗  Never Primary Negative for a warning — use backgroundWarning instead
 ✗  Never Tertiary where the user needs to notice the action
-✗  Never invent a new button variant — the 6 defined variants cover all valid use cases
+✗  Never invent a new button variant — the defined variants cover all valid use cases
+✗  Never place two Primary Negative buttons side by side
+
+**Destructive pairs**
+- A destructive action that is not the main action → **Secondary Negative**
+- Neutral pair for a destructive action → Secondary (Cancel) + Primary Negative (Remove/Sell)
+- Two destructive actions in one row → one Primary Negative + one Secondary Negative; never two Primary Negative
 ```
 
 ---
@@ -1483,7 +1614,7 @@ Inline within dense text or table?       → Tertiary Compact
 
 A small interactive chip used for filters, tags, and selection. 32px tall, fully rounded (border-radius 99px).
 
-> **Selected state — always neutral.** The accent selected variant (green fill + green border) exists in Figma but is almost never used in the app. Always use the neutral selected state (`backgroundTertiary` + `borderNeutral`).
+> **Selected state — always neutral.** A selected pill uses `backgroundTertiary` fill + `borderNeutral` border on `backgroundPrimary`, and `backgroundTertiaryOnSurfaceZ1` fill on a Z1 surface (card). Selected hover and selected pressed also use the selected fill, not the transparent hover token.
 
 #### Layouts
 
@@ -1502,10 +1633,24 @@ Gap between icon and label: **6px**. Gap between label and count badge: **4px**.
 | State | Background | Border | Label colour |
 |-------|-----------|--------|--------------|
 | **Enabled** | transparent | `borderPrimary` (1px) | `contentPrimary` |
-| **Selected** | `backgroundTertiary` | `borderNeutral` (1.5px) | `contentPrimary` |
+| **Hover** | `backgroundTransparentHover` | `borderPrimary` (1px) | `contentPrimary` |
+| **Pressed** | `backgroundTransparentPressed` | `borderPrimary` (1px) | `contentPrimary` |
+| **Selected** | `backgroundTertiary` | `borderNeutral` (1px) | `contentPrimary` |
 | **Disabled** | `backgroundDisabled` | none | `contentDisabled` |
 
-There is **no separate pressed state** — touch feedback during a tap can be implemented as a subtle interaction effect, but it is not a documented design state.
+On a Z1 surface (card), swap to the OnSurfaceZ1 variants: Enabled, Hover and Pressed borders use `borderPrimaryOnSurfaceZ1`, Hover uses `backgroundTransparentHoverOnSurfaceZ1`, and Selected uses `backgroundTertiaryOnSurfaceZ1` fill with `borderNeutral`. The stylised jacket (below) uses `borderPrimaryOnSurfaceZ1` and `backgroundTertiaryOnSurfaceZ1` for the same reason.
+
+Unselected Hover and Pressed use `backgroundTransparentHover` and `backgroundTransparentPressed` on the base layer, the same tokens as Secondary buttons. In light mode these resolve to `new-neutrals/light/2` (`#F7F7F7`). Selected, selected hover and selected pressed all use the selected fill token, not a separate interaction token.
+
+#### Icons
+
+Icons are 16×16px, local icon classes only (see Asset Sourcing Policy). The icon is optional and flexible — pick any icon from the local set that fits the context. The examples below are the common ones from Figma:
+
+| Role | Figma icon | Class |
+|------|-----------|-------|
+| Leading (example) | chevron-right | `gh-standard-arrow-right-01` |
+| Trailing (example: menu / sheet) | caret-down | `gh-standard-arrow-down-01` |
+| Trailing (example: dismissible selection) | X close | `gh-standard-cancel-01` |
 
 #### Width
 
@@ -1523,7 +1668,7 @@ Pills **hug their content** — no min-width, no max-width. Padding (per layout)
 
 #### Count badge
 
-Anchored to the right of the label; circular pill, min 16px wide. **Hide the badge entirely when the count is 0.** Show only when count ≥ 1. Don't render "0" as a badge.
+Anchored to the right of the label; a pill-shaped badge, 16px tall, min 16px wide, with 10px radius. **Hide the badge entirely when the count is 0.** Show only when count ≥ 1. Don't render "0" as a badge.
 
 #### HTML implementation
 
@@ -1547,10 +1692,22 @@ Anchored to the right of the label; circular pill, min 16px wide. **Hide the bad
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
+.mds-pill--force-hover,
+.mds-pill:hover {
+  background: var(--backgroundTransparentHover);
+}
+.mds-pill--force-pressed,
+.mds-pill:active {
+  background: var(--backgroundTransparentPressed);
+}
+.mds-pill--selected:hover,
+.mds-pill--selected:active {
+  background: var(--backgroundTertiary);
+}
 .mds-pill--selected {
   background: var(--backgroundTertiary);
   border-color: var(--borderNeutral);
-  border-width: 1.5px;
+  border-width: 1px;
 }
 .mds-pill--disabled {
   background: var(--backgroundDisabled);
@@ -1603,6 +1760,16 @@ Anchored to the right of the label; circular pill, min 16px wide. **Hide the bad
   <span class="mds-pill__label">Label</span>
 </button>
 
+<!-- Default — hover (pointer over) -->
+<button class="mds-pill mds-pill--force-hover" type="button">
+  <span class="mds-pill__label">Label</span>
+</button>
+
+<!-- Default — pressed (while touched) -->
+<button class="mds-pill mds-pill--force-pressed" type="button">
+  <span class="mds-pill__label">Label</span>
+</button>
+
 <!-- Default — selected (neutral) -->
 <button class="mds-pill mds-pill--selected" type="button">
   <span class="mds-pill__label">Label</span>
@@ -1610,7 +1777,7 @@ Anchored to the right of the label; circular pill, min 16px wide. **Hide the bad
 
 <!-- Leading icon -->
 <button class="mds-pill mds-pill--leading" type="button">
-  <span class="mds-pill__icon"><i class="gh-standard-add-01"></i></span>
+  <span class="mds-pill__icon"><i class="gh-standard-arrow-right-01"></i></span>
   <span class="mds-pill__label">Label</span>
 </button>
 
@@ -1622,14 +1789,14 @@ Anchored to the right of the label; circular pill, min 16px wide. **Hide the bad
 
 <!-- Leading + trailing (selected filter with close) -->
 <button class="mds-pill mds-pill--both mds-pill--selected" type="button">
-  <span class="mds-pill__icon"><i class="gh-standard-add-01"></i></span>
+  <span class="mds-pill__icon"><i class="gh-standard-arrow-right-01"></i></span>
   <span class="mds-pill__label">Label</span>
   <span class="mds-pill__icon"><i class="gh-standard-cancel-01"></i></span>
 </button>
 
 <!-- Icon only -->
 <button class="mds-pill mds-pill--icon-only" type="button">
-  <span class="mds-pill__icon"><i class="gh-standard-add-01"></i></span>
+  <span class="mds-pill__icon"><i class="gh-standard-arrow-right-01"></i></span>
 </button>
 
 <!-- With count badge (hide when count is 0) -->
@@ -1647,16 +1814,14 @@ Anchored to the right of the label; circular pill, min 16px wide. **Hide the bad
 #### Do / Don't
 
 ```
-✓  Always use neutral selected state — backgroundTertiary + borderNeutral
+✓  Always use neutral selected state — backgroundTertiary + borderNeutral (on Z1: backgroundTertiaryOnSurfaceZ1)
 ✓  Keep labels concise — pills are space-constrained
 ✓  Use count badge when quantity matters (e.g. "Filters · 3"); hide when count is 0
 ✓  Hug content — pills size to their label, no min/max width
 ✓  Scroll the pill group horizontally on overflow
 
-✗  Never use a "pressed" state — there is none in this spec
 ✗  Never use a notification dot on a pill — not part of this component
-✗  Never use accent selected state (green bg + green border) — not used in the app
-✗  Never use a coloured label (contentAccent, contentPositive, etc.) in a pill
+✗  Never use a coloured label (contentPositive, contentNegative, etc.) in a pill
 ✗  Never combine leading and trailing icons without a label
 ✗  Never use a pill where a button is needed — pills are for filters/tags, not CTAs
 ✗  Never use a pill for navigation — use the Tab component instead
@@ -1682,8 +1847,9 @@ Pills almost always appear in groups. A pill group has one of three primary func
 
 **Rules for all pill groups:**
 - State changes require an explicit tap — no swipe gestures
-- **In a multi-select group, when a pill becomes selected it auto-switches from `default` layout to `trailing-icon` layout, with a close (×) icon (`gh-standard-cancel-01`) as the trailing icon.** Tapping the × dismisses the selection. The layout switch happens automatically — designers don't manually pick `trailing-icon` for the selected state.
-- Single-select groups do not need a close icon — pills stay in `default` layout in both selected and enabled states.
+- **Trailing icons are contextual, not mandated.** A pill may use any icon from the local icon set (`gh-standard-*` / `gh-rounded-*`) when it makes sense for the context — a caret when the pill opens a menu or sheet, a close (×, `gh-standard-cancel-01`) when a selected pill in a multi-select filter group can be dismissed, or another icon that clarifies the meaning. Choose the icon that best communicates the pill's behaviour; there is no required trailing icon for the selected state.
+- A close (×) is a good fit for a dismissible selection in a multi-select group, but it is not required. Tapping a dismissible pill's icon clears its selection.
+- Single-select groups usually do not need a trailing icon — pills stay in `default` layout in both selected and enabled states.
 - Labels must be short and descriptive
 - Never use a pill group for page/section navigation
 - Pill groups **scroll horizontally on overflow** — they never wrap to a second row and never truncate labels.
@@ -1692,25 +1858,27 @@ Pills almost always appear in groups. A pill group has one of three primary func
 
 **Base pill group** — use this as the default
 
-- All pills show an outline border (`borderPrimary`) in the unselected state
-- Selected pill has a thicker/saturated border (`borderNeutral`, 1.5px)
+- All pills show an outline border (`borderPrimary`) in the unselected state (`borderPrimaryOnSurfaceZ1` when the group sits on a Z1 card)
+- Selected pill has a neutral border (`borderNeutral`, 1px)
 - Supports horizontal scrolling for larger sets
 - Use when the pill group is important but not the dominant element on the screen
 
 **Minimal pill group** — for secondary, low-emphasis contexts
 
 - Unselected pills have **no border** (borderless)
-- Only the selected pill shows a border (`borderNeutral`, 1.5px)
+- Only the selected pill shows a border (`borderNeutral`, 1px)
+- The selected fill is `backgroundTertiary`, or `backgroundTertiaryOnSurfaceZ1` on a Z1 card
 - Supports horizontal scrolling
 - Use when the screen is visually busy and the pill group is a supporting element
 - Example: timeframe toggle on a chart card within a busy dashboard
 
 **Stylised pill group** — for high-emphasis, focal interactions
 
-- Pills sit inside a shared container "jacket" with a `backgroundTertiary` fill — **no shadows**.
-- Pills inside the jacket follow the standard pill state spec:
-  - **Enabled:** no background fill, `borderPrimary` (1px), label `contentPrimary`
-  - **Selected:** `backgroundTertiary` fill, `borderNeutral` (1.5px), label `contentPrimary`
+- Pills sit inside a shared container "jacket" — **no shadows**.
+- The jacket is a Z1 surface: fill `backgroundSurfaceZ1` with a `borderPrimaryOnSurfaceZ1` (1px) border.
+- Pills inside the jacket follow the standard pill state spec, with the jacket's own rules:
+  - **Enabled:** no background fill, transparent border, label `contentPrimary`
+  - **Selected:** `backgroundTertiaryOnSurfaceZ1` fill, `borderPrimaryOnSurfaceZ1` (1px), label `contentPrimary`
 - Maximum emphasis — the group stands out as the key interaction on the screen
 - **Constraints:** 2–3 pills only; no scrolling; no disabled state (all options must always be tappable)
 - Use when the pill group is the central, high-impact interaction on the screen
@@ -1736,7 +1904,124 @@ Start here: Base pill group
 
 ---
 
-### 10.7 Order Card Input Field (`oc-input-field`)
+### 10.7 Avatar
+
+Avatars represent a **person** or a **company**. They are never used for decoration.
+
+| Type | Shape | Radius | Content |
+|------|-------|--------|---------|
+| **Person** (`mds-avatar mds-avatar--person`) | Circle | 99px | Profile photo, or initials fallback |
+| **Company** (`mds-avatar mds-avatar--company`) | Square | 8px | Company logo, or alphabet icon fallback |
+
+#### Anatomy
+
+An avatar always tries the image first. Fallbacks apply only when no image is available: initials for a person, and the alphabet glyph for a company.
+
+An avatar has three parts. Number them in the same order when you annotate a design.
+
+1. **Avatar container**: the circle or square shape. It sets the size and the radius. Every avatar has a 1px `borderPrimary` border.
+2. **Content**: the photo, logo, initials or alphabet icon.
+3. **Fill**: the DataViz subtle background for the initials and alphabet fallbacks. Photos and logos have no fill.
+
+#### States
+
+| State | Person | Company |
+|-------|--------|---------|
+| Photo or logo | Profile photo | Company logo |
+| Initials or alphabet icon | Initials on a DataViz subtle fill | Alphabet icon on a DataViz subtle fill |
+| Disabled | Initials on `backgroundTertiary`, text `contentDisabled` | Icon on `backgroundSecondary`, icon `contentDisabled` |
+
+Use the disabled state for an avatar that cannot be acted on. Never use opacity to show it.
+
+#### Sizes
+
+| Size | Class | Dimensions | Initials font | Icon size |
+|------|-------|-----------|---------------|-----------|
+| small | `--xs` | 32 × 32 | 12px / 18, 500 | 16px |
+| medium (default) | `--sm` | 40 × 40 | 12px / 18, 500 | 16px |
+| large | `--md` | 48 × 48 | 14px / 20, 500 | 20px |
+| x-large | `--lg` | 56 × 56 | 16px / 24, 500 | 24px |
+
+Company avatars use the same four sizes. Pick the size from the table. The alphabet glyph uses the icon size in the table.
+
+#### Person avatar
+
+- **Photo** (recommended): a circular crop of a profile photo, `object-fit: cover`, centred on the face.
+- **Initials fallback**: a pure fallback, used only when no photo is provided. Two letters: the first character of the first word of the name, then the first character of the last word (for example `Sagnik Bagchi` → `SB`, `Mary Ann Smith` → `MS`). Use uppercase. If there is no last name, use the first character of the first name only. Font `body-small-heavy` (12px) or the larger body token for the size.
+- **Fill**: a DataViz subtle background with a matching `contentOnDataViz{Color}Subtle` text colour (for example `backgroundDataVizMintGreenSubtle` with `contentOnDataVizMintGreenSubtle`). Do not use a neutral background for initials.
+- **Hue**: picked from the first character of the **last name**, so the same person always gets the same colour. If there is no last name, use the first character of the first name. The letter-to-hue map is the same 8-band map used for the alphabet glyph (see the table below).
+- **Disabled**: show the initials placeholder with `backgroundTertiary` fill and `contentDisabled` text. Never show the photo while disabled, and never use opacity.
+
+> **Do not** use an icon to represent a person in the fallback. Use initials.
+
+#### Company avatar
+
+- **Logo** (recommended): the company logo, filling the square with `object-fit: contain`. Logos have no background. Use only logos from the local `logos/` folders.
+- **Alphabet fallback**: a pure fallback, used only when no logo is available, on every surface. Show the alphabet glyph (`icons/alphabet/{L}.svg`) for the first letter of the company name inside a DataViz subtle filled square. The fill and glyph colour come from the Alphabet icon colours table below. Example: JIO with no logo → `J` on sky-blue; SWIGGY with no logo → `S` on yellow.
+- **Disabled**: `backgroundSecondary` fill with the icon in `contentDisabled`. Never use opacity.
+- **Do not** use a bank icon, a generic building icon, or initials as a company fallback. Initials read as a person.
+
+#### Company logo rules
+
+- Logos come only from the local `logos/banks/`, `logos/us_logos/` and `logos/stocks/` folders. Never fetch a logo from a remote URL, CDN or brand site.
+- The logo fills the square edge to edge with `object-fit: contain` and no padding between the image and the border. Logo PNGs are trimmed so the artwork reaches the edge of the file. Do not crop with `object-fit: cover`.
+- Use the square shape for every company, including banks and brands whose logo is a circle. Circles read as people.
+- Logos keep their own colours. Do not tint or recolour a logo to match the fill.
+
+#### Accessibility
+
+- A company logo needs alt text that names the company, for example `alt="Microsoft logo"`.
+- A person photo needs alt text that describes the person, or `alt="Profile photo"` when the name is not shown nearby.
+- Decorative avatars with the name shown next to them use `alt=""`, so screen readers do not repeat the name.
+- Initials and alphabet glyphs must meet contrast for their text colour. The `contentOnDataViz{Color}Subtle` pairs in the tables below are checked for this.
+- A disabled avatar still needs its name or alt text. Do not hide it from screen readers.
+
+#### Alphabet icon colours
+
+The alphabet glyph (`icons/alphabet/{L}.svg`) takes its DataViz hue from the letter's band. Background: `backgroundDataViz{Color}Subtle`. Glyph and text: `contentOnDataViz{Color}Subtle`. The same map is used for person initials, hued by last-name letter.
+
+The eight bands run left to right like a VIBGYOR spectrum, mapped to the DataViz tokens. There is one map, used everywhere.
+
+| Letters | DataViz hue |
+|---------|-------------|
+| A, B, C, D | Lilac |
+| E, F, G | Blue |
+| H, I, J | Sky blue |
+| K, L, M | Mint green |
+| N, O, P | Olive green |
+| Q, R, S | Yellow |
+| T, U, V | Orange |
+| W, X, Y, Z | Red |
+
+Examples: `A` → lilac, `J` → sky blue, `M` → mint green, `S` → yellow, `Z` → red.
+
+
+#### Guidelines
+
+Each rule has a Do and an Avoid example on the Avatar Guidelines tab.
+
+| Topic | Do | Avoid |
+|-------|----|-------|
+| Company shape | Square avatars in a watchlist row, one per company | Circle logos, which read as people |
+| Fit the logo | Logo fills the square edge to edge, no padding from image to border | Cover crop that cuts off the name or mark |
+| Fallback without a logo | Alphabet icon in a square | Initials in a circle, which read as a person |
+| Group logos | Each logo in its own 32px square avatar | Bare logos with no container |
+
+#### Decision guide
+
+| Question | Use |
+|----------|-----|
+| Is it a user or account holder? | Person avatar |
+| Is it a stock, fund, bank or other company? | Company avatar |
+| Is a photo available? | Photo (person) or logo (company) |
+| No photo or logo, person? | Initials, hued by last-name letter |
+| No logo, company? | Alphabet icon fallback |
+| Logo has a circle mark? | Still use the square company avatar |
+| Avatar cannot be acted on? | Disabled state, no opacity |
+
+---
+
+### 10.8 Order Card Input Field (`oc-input-field`)
 
 The numeric input used inside order cards (Buy / Sell forms). Two types:
 
@@ -1823,6 +2108,7 @@ The input itself **has no label, helper text, or inline error message**. Field l
 - **Cursor only appears in `active-typing`** — not in `focus`, not in `inactive`.
 - **Stepper increments by 1 lot per tap.** Long-press fast-increment is not supported in v1.
 - **Stepper minimum is 1 lot.** The `−` button is disabled at 1 — the count never reaches 0.
+- **Stepper has no documented maximum.** There is no spec-level upper bound — the `+` button stays enabled indefinitely unless a specific flow (e.g. IPO lot caps, available margin in F&O) imposes its own limit. That limit is flow-specific business logic, not a component-level rule.
 - **Disabled fields never show focus/hover.** Tapping does nothing — no keyboard, no border change.
 - **Warning is soft validation, real-time.** It fires while the user is typing (e.g. "price >5% from LTP") and is non-blocking — the order card CTA stays enabled.
 - **Error is blocking.** The order card CTA disables until the value is corrected.
@@ -1977,12 +2263,78 @@ The input itself **has no label, helper text, or inline error message**. Field l
 
 ---
 
+## 11. Spacing
+
+Mint spacing is token-based and scale-restricted — every margin, padding, and gap value used in product UI must come from this scale. Never use an arbitrary off-scale pixel value.
+
+### 11.1 Scale
+
+| Token | Pixels |
+|-------|--------|
+| `space-0` | 0px |
+| `space-2` | 2px |
+| `space-4` | 4px |
+| `space-6` | 6px |
+| `space-8` | 8px |
+| `space-12` | 12px |
+| `space-16` | 16px |
+| `space-20` | 20px |
+| `space-24` | 24px |
+| `space-32` | 32px |
+| `space-40` | 40px |
+| `space-48` | 48px |
+| `space-64` | 64px |
+| `space-80` | 80px |
+| `space-96` | 96px |
+| `space-128` | 128px |
+
+### 11.2 Rules
+
+- **Scope.** This scale governs padding, margin and gap only. Heights, icon sizes, corner radii and border widths are defined by each component's spec, not by this scale.
+- **Standard screen horizontal padding is 16px** (`space-16`). This applies to all edges — left, right, and the right edge of header/app bar elements. Content must never run flush to the screen edge.
+- **Never use a value outside this scale.** An "almost 16px" gap (e.g. 14px, 15px, 18px) is always wrong — round to the nearest scale value instead of eyeballing a custom one.
+- **Let the UI breathe.** Never compress elements into a tight cluster to fit more content on screen. If a row or card feels cramped, increase spacing or reduce content — never drop below the minimum scale value for that context.
+- **Match the step to the relationship.** The smaller steps (`space-2`–`space-8`) are for spacing *within* a component (icon-to-label gap, internal padding). The larger steps (`space-32` and up) are for spacing *between* sections, cards, or major layout blocks — don't use a large step for a tight internal gap, or a tiny step to separate unrelated sections.
+
+### Do / Don't
+
+```
+✓  Use 16px (space-16) as the standard screen edge padding
+✓  Pick the nearest scale value for every margin, padding, and gap
+✓  Increase spacing (never shrink below scale) when a layout feels cramped
+✓  Use small steps (2–8px) for internal/icon-label gaps, large steps (32px+) between sections
+
+✗  Never use an off-scale value (14px, 15px, 18px, 28px...)
+✗  Never compress a row/card below its minimum spacing to fit more content
+✗  Never use a large section-spacing step for a tight internal gap, or vice versa
+```
+
+---
+
 ## Changelog
 
 All notable changes to the Mint Design System token reference are documented here.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| `v0.41` | 16/11/2026 | List Row (§10.1): container padding is 12px top and bottom, 16px left and right; the row heights in the table are minimums. Thumbnail shape: funds, ETFs, bonds, F&O, IPOs, NFOs and US stocks count as companies, so they use the square. Row height variants are named Default and Tall. Tall is a row variant, separate from the Large element size. Company examples use real logos. |
+| `v0.40` | 16/11/2026 | List Row (§10.1): thumbnail is 40×40 by default, with sub-text the row is 72px (2px label-to-sub-text gap), without sub-text 64px. Element sizes: icon 16/20/24, thumbnail 32/40/48. Trailing element size is independent of the leading one. Thumbnail shape follows §10.7: circle for a person, square for a company or fund logo. |
+| `v0.39` | 15/11/2026 | Asset Sourcing Policy: agents must always use the local project files for fonts, icons, logos, alphabet glyphs and other assets, keep the relative paths, and ask if a file is missing. |
+| `v0.38` | 15/11/2026 | Pill (§10.6): stylised jacket enabled pills have a transparent border (not borderPrimary), matching the site. Selected pill inside the jacket uses backgroundTertiaryOnSurfaceZ1 with borderPrimaryOnSurfaceZ1. Pill playground adds a Z1 card preview. Buttons (§10.5) guidelines: destructive pair example uses Secondary Negative on backgroundNegativeSubtle ("Cancel order") with Primary Negative ("Modify order"). Buttons Do example for logos uses Jio and Swiggy. |
+| `v0.37` | 15/11/2026 | Avatar (§10.7): alphabet glyph and person initials use one 8-band hue map (lilac, blue, sky blue, mint green, olive green, yellow, orange, red), from A to Z. Alphabet glyph path is `icons/alphabet/{L}.svg`. US logos (AAPL, MSFT, NVDA, TSLA) live in `logos/us_logos/` and are included in the downloadable assets. Stock Logos: the alphabet glyph replaces the initials fallback. Buttons (§10.5): Accent is a toggle on Secondary and Tertiary, and Tertiary Compact is live. Avatar playground takes a full name (default "Sagnik Bagchi" → SB, lilac). Pill (§10.6): selected hover and selected pressed use surface-2. |
+| `v0.36` | 15/11/2026 | Avatar (§10.7): every avatar has a 1px border. Logos and photos have no fill. Initials and alphabet fallbacks keep their DataViz fill. Image is tried first. Alphabet glyph is recoloured to the DataViz text token and sized from the icon table. Watchlist examples JIO and SWIGGY use the alphabet fallback. |
+| `v0.35` | 15/11/2026 | Avatar (§10.7): company logos fill the square edge to edge with no padding. Variants and sizes tables restyled as one bordered table without inner dividers. Do/Avoid examples use Indian stock logos. |
+| `v0.34` | 15/11/2026 | Avatar (§10.7): full component documentation. Company fallback is the alphabet icon, tinted by the first letter of the company name. Added anatomy, accessibility, the company logo rules, guideline examples, and the logo list. |
+| `v0.33` | 15/11/2026 | Avatar (§10.7): alphabet icon colours mapped per letter to the closest DataViz hue. |
+| `v0.32` | 15/11/2026 | Avatar (§10.7): new spec for person and company avatars, sizes, photo and logo rules, initials fallback with DataViz subtle hue by last-name letter, Invest alphabet fallback, disabled state without opacity. |
+| `v0.31` | 15/11/2026 | Buttons (§10.5): added Secondary Negative variant and Destructive pairs guidance; opacity removed from Tertiary hover (now `contentSecondary` label); compact Tertiary only outside button groups; loading buttons disabled for taps with `contentPrimary` spinner on Tertiary; button groups allow Secondary Accent/Secondary Negative/Primary Negative on the left, equal-width slots, labels never wrap or truncate. |
+| `v0.30` | 15/11/2026 | Pill (§10.6): trailing icon is now contextual, not mandated — any local icon that fits the context; the auto-switch-to-× rule for multi-select is replaced by a flexible guideline. |
+| `v0.29` | 15/11/2026 | Pill (§10.6): removed accent selected variant; added Hover and Pressed states (transparent hover/pressed tokens from Figma); removed "no pressed state" rule; selected border set to 1px per Figma; icon classes named (arrow-right-01 leading, arrow-down-01 trailing, cancel-01 close); HTML block updated to match. |
+| `v0.28` | 15/11/2026 | Numeric type: hero numbers use heading/display tokens; numbers in list items, inputs, pills and chips use body tokens (§9.1). Bottom Nav label moved from heading-xxsmall (Sohne) to body-small-heavy (GrowwSans 500, 12px/18px) (§10.4). Neutral tokens renamed from `neutrals/` to `new-neutrals/` (§2). Spacing scope clarified: padding, margin and gap only (§11.2). Starter block: added contentAccentSecondary, borderWarning, backgroundInversePrimary, contentInversePrimary. |
+| `v0.25` | 12/11/2026 | Added Spacing section (§11) — full 16-value scale (0–128px) and usage rules, synced with the new Spacing foundation section (Overview/Guidelines/Tokens tabs) in index.html. |
+| `v0.24` | 12/11/2026 | List Item Divider: clarified spec language — left edge insets to align with label text (never full-bleed from the screen/card edge), right edge stays flush. |
+| `v0.23` | 12/11/2026 | Added "Asset Sourcing Policy" section — fonts/icons/logos must only come from local project folders, never fetched remotely, and this travels with the doc to any other LLM it's handed to. Stock Logos: split the single table into bank logos (`./logos/banks/`) and everything-else (`./logos/stocks/`), added Google/Alphabet (`google.png`); fixed the fallback-example `<img>` snippet which still referenced the live vercel.app URL instead of a local path. |
+| `v0.20` | 10/11/2026 | CSS Starter Block: switched all font/icon/logo paths from remote vercel.app URLs to local relative paths; restructured to dark-mode-default `:root` with a `:root[data-mode="light"]` override block; added missing utility classes (body-xsmall, heading-xxsmall, body-xlarge, body-xlarge-heavy, display-large, display-xlarge). Stock Logos: local path + company-name-initials fallback rule. List Row: documented 32×32px leading thumbnail size. App Bar: clarified overflow rule (3rd+ action) and local logo path. Bottom Nav: label typography changed to heading-xxsmall (12px/18px) from the old 10px exception. Buttons: fixed backgroundAccentHover/Selected naming (dropped erroneous "Base" infix); added 3-button group ordering rule. Order Card Input: documented stepper has no spec-level max. Added clarifying callouts for Hover/Pressed parity, data-viz base parity across modes, and contentOnColour mode-independence. Canonical brand slugs footnote added. |
 | `v0.18` | 05/05/2026 | Spec hardening across components 10.1–10.7 to remove ambiguity for LLMs/agents. List Row: default tappable, backgroundSecondary on press, label truncates first, coloured sub-text live-data only. Tab: nav-only purpose, any count + horizontal scroll, top OR mid-screen placement, 1px borderPrimary divider, indicator = label width + 32px (16px each side). App Bar: brand-specific L0 logo, Standard bar per-flow, subtitle per-screen, 4+ actions overflow into ⋮ sheet, strict 1:1 title↔active-tab match. Bottom Nav: full-slot tap target, labels never truncate, L0-only visibility. Buttons: disabled fill universal (incl. Tertiary), loading hides label keeps width, width defaults flex/full-width-Large/hug-Small, icon-only deferred. Pill: dropped pressed state and notification dot, multi-select selected pill auto-switches to trailing-icon × layout, count badge hidden at 0, hug content, scroll on overflow, stylised group uses backgroundTertiary jacket no shadows. Order Card Input: width strictly 120px, always numeric keyboard, no ₹, helper/error message above keypad-and-dock, disabled-fill copy is illustrative, warning is real-time soft validation, stepper minimum 1 lot. |
 | `v0.17` | 05/05/2026 | Bottom Nav: 3–5 tabs (was always 5); 5th slot is any one of {More, Bonds, US Stocks, Gold, FD}; full HTML implementation with hugeicons; corrected typography (Sohne 500, 10px, mixed case — exception to type scale). Hugeicons CSS expanded from 50 → 10,980 mappings (full stroke + solid catalog from font files). |
 | `v0.16` | 05/05/2026 | Added Order Card Input Field (10.7) — default + stepper types, 6 states, filled/empty, cursor behaviour, HTML implementation. Stepper restricted to IPO/F&O. |
