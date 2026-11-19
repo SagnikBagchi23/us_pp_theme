@@ -124,5 +124,7 @@ export function ThemeDialKit() {
     });
   }, [values.headerImage.image, values.headerImage.opacity, values.headerImage.blendMode, setImageSettings]);
 
-  return <DialRoot position="top-right" theme="system" />;
+  // dialkit hides itself by default in production builds (NODE_ENV === 'production').
+  // This app's whole purpose is a live-tunable theme preview, so force it on everywhere.
+  return <DialRoot position="top-right" theme="system" productionEnabled />;
 }
