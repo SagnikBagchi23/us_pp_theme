@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const SCREEN_W = 393;
-const SCREEN_H = 852;
-const BEZEL = 2;
+const SCREEN_W = 360;
+const SCREEN_H = 800;
+const BEZEL = 4;
 const CORNER_RADIUS = 32;
 
 interface IPhoneMockupProps {
