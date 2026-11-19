@@ -331,7 +331,7 @@ export default function ProductScreen() {
 
   if (isWide) {
     return (
-      <View style={styles.desktopWrapper}>
+      <View style={[styles.desktopWrapper, { backgroundColor: resolved.desktopBackdropColor }]}>
         <View style={styles.desktopRow}>
           {Platform.OS === 'web' ? <ThemeDialKit /> : <ThemePanel />}
           <IPhoneMockup>{phoneContent}</IPhoneMockup>
@@ -366,7 +366,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E8EAED',
   },
   desktopRow: {
     flexDirection: 'row',

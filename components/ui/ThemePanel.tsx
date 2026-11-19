@@ -95,6 +95,13 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
             onPick={(hex) => setManualOverride('chartBackgroundColor', hex)}
             onReset={() => setManualOverride('chartBackgroundColor', undefined)}
           />
+          <PanelSwatchRow
+            label="Desktop backdrop"
+            color={resolved.desktopBackdropColor}
+            isAuto={!state.manualOverrides.desktopBackdropColor}
+            onPick={(hex) => setManualOverride('desktopBackdropColor', hex)}
+            onReset={() => setManualOverride('desktopBackdropColor', undefined)}
+          />
         </PanelSection>
 
         <PanelSection title="Gradient">

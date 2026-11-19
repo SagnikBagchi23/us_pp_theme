@@ -25,6 +25,7 @@ export function ThemeDialKit() {
     background: {
       pageBackground: { type: 'color', default: initial.backgroundColor },
       chartBackground: { type: 'color', default: initial.chartBackgroundColor },
+      desktopBackdrop: { type: 'color', default: initial.desktopBackdropColor },
     },
     gradient: {
       enabled: state.gradient.enabled,
@@ -71,7 +72,13 @@ export function ThemeDialKit() {
   useEffect(() => {
     setManualOverride('backgroundColor', values.background.pageBackground);
     setManualOverride('chartBackgroundColor', values.background.chartBackground);
-  }, [values.background.pageBackground, values.background.chartBackground, setManualOverride]);
+    setManualOverride('desktopBackdropColor', values.background.desktopBackdrop);
+  }, [
+    values.background.pageBackground,
+    values.background.chartBackground,
+    values.background.desktopBackdrop,
+    setManualOverride,
+  ]);
 
   useEffect(() => {
     setGradient({ enabled: values.gradient.enabled, heightPct: values.gradient.heightPct, color: values.gradient.color });

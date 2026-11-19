@@ -39,6 +39,7 @@ export interface PerElementOverrides {
   chartNegativeColor?: string;
   backgroundColor?: string;
   chartBackgroundColor?: string;
+  desktopBackdropColor?: string;
 }
 
 export interface GradientSettings {
@@ -81,6 +82,9 @@ interface LogoThemeEntry {
 }
 
 const LOGO_THEMES = logoThemes as Record<string, LogoThemeEntry>;
+
+// Backdrop behind the iPhone mockup on wide (desktop) viewports — has no native equivalent.
+const DESKTOP_BACKDROP_DEFAULT = '#121212';
 
 interface ThemeOverrideState {
   selectedLogoId: string | null;
@@ -221,6 +225,7 @@ export interface ResolvedElementColors {
   chartNegativeColor: string;
   backgroundColor: string;
   chartBackgroundColor: string;
+  desktopBackdropColor: string;
   gradientColor: string;
   gradientEnabled: boolean;
   gradientHeightPct: number;
@@ -249,6 +254,7 @@ export function useResolvedElementColors(positive: boolean = true): ResolvedElem
     chartNegativeColor: manualOverrides.chartNegativeColor ?? colors.contentNegative,
     backgroundColor: manualOverrides.backgroundColor ?? colors.backgroundPrimary,
     chartBackgroundColor: manualOverrides.chartBackgroundColor ?? colors.backgroundPrimary,
+    desktopBackdropColor: manualOverrides.desktopBackdropColor ?? DESKTOP_BACKDROP_DEFAULT,
     gradientColor: gradient.color ?? derived?.subtle ?? colors.backgroundSurfaceZ1,
     gradientEnabled: gradient.enabled,
     gradientHeightPct: gradient.heightPct,
