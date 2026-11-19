@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { useTheme } from '@/constants/theme';
 import { textStyles, spacing } from '@/constants/tokens';
 import { Icon } from '@/components/ui/Icon';
-import type { ImageSourcePropType } from 'react-native';
+import type { ImageSourcePropType, LayoutChangeEvent } from 'react-native';
 
 interface StockHeaderProps {
   ticker: string;
@@ -13,13 +13,14 @@ interface StockHeaderProps {
   changePositive: boolean;
   period: string;
   logoSource?: ImageSourcePropType;
+  onLayout?: (e: LayoutChangeEvent) => void;
 }
 
-export function StockHeader({ ticker, name, price, change, changePositive, period, logoSource }: StockHeaderProps) {
+export function StockHeader({ ticker, name, price, change, changePositive, period, logoSource, onLayout }: StockHeaderProps) {
   const { colors } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayout}>
       <Image
         source={logoSource ?? require('../../assets/groww-logo.png')}
         style={styles.logo}

@@ -1,9 +1,18 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { useTheme, useThemeOverride, useResolvedElementColors, useLogoThemeInfo } from '@/constants/theme';
 import { textStyles, spacing } from '@/constants/tokens';
 import { LOGO_CATALOG } from '@/assets/logoCatalog';
-import { PanelSection, PanelToggle, PanelSlider, PanelSelect, PanelSwatchRow } from './ThemePanelControls';
+import {
+  PanelSection,
+  PanelToggle,
+  PanelSlider,
+  PanelSelect,
+  PanelSwatchRow,
+  PanelSegmented,
+  PanelImagePicker,
+} from './ThemePanelControls';
 
 interface ThemePanelProps {
   variant?: 'inline' | 'sheet';
@@ -11,9 +20,32 @@ interface ThemePanelProps {
 
 export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
   const { colors } = useTheme();
-  const { state, setSelectedLogo, setManualOverride, setGradient, resetOverrides } = useThemeOverride();
-  const resolved = useResolvedElementColors();
+  const {
+    state,
+    setSelectedLogo,
+    setManualOverride,
+    setGradient,
+    setUSTreatment,
+    setPatternSettings,
+    setImageSettings,
+    resetOverrides,
+  } = useThemeOverride();
+  // Panel preview rendering has no live price-direction context, so it resolves colors as if
+  // the stock were "up" — this only matters when colorDriverMode is 'sentiment'.
+  const resolved = useResolvedElementColors(true);
   const logoInfo = useLogoThemeInfo(state.selectedLogoId);
+
+  async function handlePickImage() {
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) return;
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets?.[0]?.uri) {
+      setImageSettings({ uri: result.assets[0].uri });
+    }
+  }
 
   return (
     <View
@@ -77,6 +109,90 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
             min={0}
             max={40}
             onChange={(v) => setGradient({ heightPct: v })}
+          />
+        </PanelSection>
+
+        <PanelSection title="US Treatment">
+          <PanelToggle
+            label="Enable US treatment"
+            value={state.usTreatment.enabled}
+            onChange={(v) => setUSTreatment({ enabled: v })}
+          />
+          <PanelSegmented
+            label="Color driver"
+            value={state.usTreatment.colorDriverMode}
+            options={[
+              { value: 'logo', label: 'Logo' },
+              { value: 'sentiment', label: 'Sentiment' },
+            ]}
+            onChange={(v) => setUSTreatment({ colorDriverMode: v })}
+          />
+        </PanelSection>
+
+        <PanelSection title="Header Pattern">
+          <PanelSegmented
+            label="Style"
+            value={state.usTreatment.pattern.style}
+            options={[
+              { value: 'starGrid', label: 'Star grid' },
+              { value: 'none', label: 'None' },
+            ]}
+            onChange={(v) => setPatternSettings({ style: v })}
+          />
+          <PanelSlider
+            label="Opacity"
+            value={state.usTreatment.pattern.opacity * 100}
+            min={0}
+            max={40}
+            onChange={(v) => setPatternSettings({ opacity: v / 100 })}
+          />
+          <PanelSlider
+            label="Density"
+            value={state.usTreatment.pattern.density}
+            min={3}
+            max={12}
+            onChange={(v) => setPatternSettings({ density: v })}
+          />
+          <PanelSlider
+            label="Dot size"
+            value={state.usTreatment.pattern.dotSize * 10}
+            min={5}
+            max={40}
+            onChange={(v) => setPatternSettings({ dotSize: v / 10 })}
+          />
+          <PanelSlider
+            label="Fade height"
+            value={state.usTreatment.pattern.fadeHeightPct}
+            min={20}
+            max={100}
+            onChange={(v) => setPatternSettings({ fadeHeightPct: v })}
+          />
+        </PanelSection>
+
+        <PanelSection title="Header Image">
+          <PanelImagePicker
+            label="Custom background image"
+            uri={state.usTreatment.image.uri}
+            onPick={handlePickImage}
+            onClear={() => setImageSettings({ uri: null })}
+          />
+          <PanelSlider
+            label="Image opacity"
+            value={state.usTreatment.image.opacity * 100}
+            min={0}
+            max={100}
+            onChange={(v) => setImageSettings({ opacity: v / 100 })}
+          />
+          <PanelSegmented
+            label={`Blend mode${Platform.OS !== 'web' ? ' (web only)' : ''}`}
+            value={state.usTreatment.image.blendMode}
+            options={[
+              { value: 'normal', label: 'Normal' },
+              { value: 'multiply', label: 'Multiply' },
+              { value: 'screen', label: 'Screen' },
+              { value: 'overlay', label: 'Overlay' },
+            ]}
+            onChange={(v) => setImageSettings({ blendMode: v })}
           />
         </PanelSection>
 

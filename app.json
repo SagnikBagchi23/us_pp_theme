@@ -19,7 +19,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos to customize the stock page background."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

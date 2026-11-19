@@ -136,6 +136,84 @@ export function PanelSelect({
   );
 }
 
+export function PanelSegmented<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  const { colors } = useTheme();
+  return (
+    <PanelRow>
+      <Text style={[textStyles.bodyBase, { color: colors.contentPrimary }]}>{label}</Text>
+      <View style={styles.segmentGroup}>
+        {options.map((opt) => {
+          const active = opt.value === value;
+          return (
+            <TouchableOpacity
+              key={opt.value}
+              onPress={() => onChange(opt.value)}
+              activeOpacity={0.7}
+              style={[
+                styles.segmentBtn,
+                { borderColor: colors.borderPrimary },
+                active && { backgroundColor: colors.contentAccent, borderColor: colors.contentAccent },
+              ]}
+            >
+              <Text
+                style={[
+                  textStyles.bodyXSmallHeavy,
+                  { color: active ? colors.backgroundPrimary : colors.contentPrimary },
+                ]}
+              >
+                {opt.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </PanelRow>
+  );
+}
+
+export function PanelImagePicker({
+  label,
+  uri,
+  onPick,
+  onClear,
+}: {
+  label: string;
+  uri: string | null;
+  onPick: () => void;
+  onClear: () => void;
+}) {
+  const { colors } = useTheme();
+  return (
+    <PanelRow>
+      <View style={{ flex: 1 }}>
+        <Text style={[textStyles.bodyBase, { color: colors.contentPrimary }]}>{label}</Text>
+        <Text style={[textStyles.bodyXSmall, { color: colors.contentTertiary }]}>
+          {uri ? 'Custom image selected' : 'None'}
+        </Text>
+      </View>
+      {uri && <Image source={{ uri }} style={styles.selectThumb} />}
+      <TouchableOpacity onPress={onPick} style={styles.resetBtn}>
+        <Text style={[textStyles.bodyXSmallHeavy, { color: colors.contentAccent }]}>{uri ? 'Change' : 'Choose'}</Text>
+      </TouchableOpacity>
+      {uri && (
+        <TouchableOpacity onPress={onClear} style={styles.resetBtn}>
+          <Text style={[textStyles.bodyXSmallHeavy, { color: colors.contentNegative }]}>Remove</Text>
+        </TouchableOpacity>
+      )}
+    </PanelRow>
+  );
+}
+
 const PRESET_SWATCHES: { family: DataVizFamily; variant: 'base' | 'emphasis' }[] = DATA_VIZ_FAMILIES.flatMap((family) => [
   { family, variant: 'base' as const },
   { family, variant: 'emphasis' as const },
@@ -252,6 +330,16 @@ const styles = StyleSheet.create({
   },
   resetBtn: {
     paddingHorizontal: spacing.xs,
+  },
+  segmentGroup: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  segmentBtn: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 6,
+    borderRadius: radius.sm,
+    borderWidth: 1,
   },
   modalBackdrop: {
     flex: 1,

@@ -33,6 +33,10 @@ import { BottomSheet } from '@/components/ui/BottomSheet';
 import { ActivateSheetContent, ACTIVATE_SHEET_HEIGHT } from '@/components/product/ActivateSheetContent';
 import { IPhoneMockup } from '@/components/product/IPhoneMockup';
 import { GradientOverlay } from '@/components/product/GradientOverlay';
+import { USHeaderPattern } from '@/components/product/USHeaderPattern';
+
+const APP_BAR_HEIGHT = 56;
+const HEADER_PATTERN_FADE_BUFFER = 24;
 
 const SYMBOL = 'AAPL';
 const YF_QUOTE_URL = `https://query2.finance.yahoo.com/v8/finance/chart/${SYMBOL}?interval=1m&range=1d&includePrePost=false`;
@@ -99,7 +103,6 @@ function clamp01(low: number, high: number, val: number): number {
 export default function ProductScreen() {
   const { colors } = useTheme();
   const { state, setSelectedLogo } = useThemeOverride();
-  const resolved = useResolvedElementColors();
   const { back, push } = useRouter();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -114,6 +117,7 @@ export default function ProductScreen() {
   const [atBottom, setAtBottom] = useState(false);
   const scrollViewHeight = useRef(0);
   const scrollContentHeight = useRef(0);
+  const [stockHeaderHeight, setStockHeaderHeight] = useState(0);
 
   const [quoteMeta, setQuoteMeta] = useState<QuoteMeta | null>(null);
 
@@ -162,6 +166,8 @@ export default function ProductScreen() {
   const priceStr = fmtInr(livePrice);
   const changeStr = fmtChange(diff, pct);
 
+  const resolved = useResolvedElementColors(positive);
+
   const holdValue = livePrice * FALLBACK.sharesHeld;
   const holdDiff = (livePrice - FALLBACK.avgBuy) * FALLBACK.sharesHeld;
   const holdPct = ((livePrice - FALLBACK.avgBuy) / FALLBACK.avgBuy) * 100;
@@ -206,6 +212,7 @@ export default function ProductScreen() {
   });
 
   const topInset = isWide ? SIMULATED_TOP_INSET : insets.top;
+  const headerRegionHeight = topInset + APP_BAR_HEIGHT + stockHeaderHeight + HEADER_PATTERN_FADE_BUFFER;
 
   const phoneContent = (
     <View style={[styles.container, { backgroundColor: resolved.backgroundColor, paddingTop: topInset }]}>
@@ -214,6 +221,15 @@ export default function ProductScreen() {
           heightPct={resolved.gradientHeightPct}
           color={resolved.gradientColor}
           backgroundColor={resolved.backgroundColor}
+        />
+      )}
+
+      {state.usTreatment.enabled && stockHeaderHeight > 0 && (
+        <USHeaderPattern
+          height={headerRegionHeight}
+          pattern={state.usTreatment.pattern}
+          image={state.usTreatment.image}
+          tintColor={resolved.gradientColor}
         />
       )}
 
@@ -252,6 +268,7 @@ export default function ProductScreen() {
           changePositive={positive}
           period={activeTf}
           logoSource={selectedLogo.source}
+          onLayout={(e) => setStockHeaderHeight(e.nativeEvent.layout.height)}
         />
 
         <StockChart

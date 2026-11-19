@@ -74,7 +74,7 @@ export function StockChart({
   onSeriesChange,
 }: ChartProps) {
   const { colors } = useTheme();
-  const resolved = useResolvedElementColors();
+  const resolved = useResolvedElementColors(positive);
 
   const seriesRef = useRef<number[]>(generateSeries(activeTf, initialPrice, hashTf(activeTf)));
   const currentPriceRef = useRef(initialPrice);

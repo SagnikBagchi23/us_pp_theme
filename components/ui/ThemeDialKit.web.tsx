@@ -7,8 +7,10 @@ import { LOGO_CATALOG } from '@/assets/logoCatalog';
 const NO_LOGO = '__none__';
 
 export function ThemeDialKit() {
-  const { state, setSelectedLogo, setManualOverride, setGradient } = useThemeOverride();
-  const resolved = useResolvedElementColors();
+  const { state, setSelectedLogo, setManualOverride, setGradient, setUSTreatment, setPatternSettings, setImageSettings } =
+    useThemeOverride();
+  // Panel preview rendering has no live price-direction context; resolves as "up" by default.
+  const resolved = useResolvedElementColors(true);
 
   // Captured once so dialkit's defaults reflect the current resolved colors
   // without the panel resetting itself on every render.
@@ -35,6 +37,30 @@ export function ThemeDialKit() {
       sipBorder: { type: 'color', default: initial.sipBorderColor },
       chartPositive: { type: 'color', default: initial.chartPositiveColor },
       chartNegative: { type: 'color', default: initial.chartNegativeColor },
+    },
+    usTreatment: {
+      enabled: state.usTreatment.enabled,
+      colorDriverMode: {
+        type: 'select',
+        options: ['logo', 'sentiment'],
+        default: state.usTreatment.colorDriverMode,
+      },
+    },
+    pattern: {
+      style: { type: 'select', options: ['starGrid', 'none'], default: state.usTreatment.pattern.style },
+      opacity: [state.usTreatment.pattern.opacity, 0, 0.4, 0.01],
+      density: [state.usTreatment.pattern.density, 3, 12, 1],
+      dotSize: [state.usTreatment.pattern.dotSize, 0.5, 4, 0.1],
+      fadeHeightPct: [state.usTreatment.pattern.fadeHeightPct, 20, 100, 1],
+    },
+    headerImage: {
+      image: { type: 'image', default: state.usTreatment.image.uri ?? '' },
+      opacity: [state.usTreatment.image.opacity, 0, 1, 0.01],
+      blendMode: {
+        type: 'select',
+        options: ['normal', 'multiply', 'screen', 'overlay'],
+        default: state.usTreatment.image.blendMode,
+      },
     },
   });
 
@@ -65,6 +91,38 @@ export function ThemeDialKit() {
     values.colors.chartNegative,
     setManualOverride,
   ]);
+
+  useEffect(() => {
+    setUSTreatment({
+      enabled: values.usTreatment.enabled,
+      colorDriverMode: values.usTreatment.colorDriverMode as 'logo' | 'sentiment',
+    });
+  }, [values.usTreatment.enabled, values.usTreatment.colorDriverMode, setUSTreatment]);
+
+  useEffect(() => {
+    setPatternSettings({
+      style: values.pattern.style as 'starGrid' | 'none',
+      opacity: values.pattern.opacity,
+      density: values.pattern.density,
+      dotSize: values.pattern.dotSize,
+      fadeHeightPct: values.pattern.fadeHeightPct,
+    });
+  }, [
+    values.pattern.style,
+    values.pattern.opacity,
+    values.pattern.density,
+    values.pattern.dotSize,
+    values.pattern.fadeHeightPct,
+    setPatternSettings,
+  ]);
+
+  useEffect(() => {
+    setImageSettings({
+      uri: values.headerImage.image || null,
+      opacity: values.headerImage.opacity,
+      blendMode: values.headerImage.blendMode as 'normal' | 'multiply' | 'screen' | 'overlay',
+    });
+  }, [values.headerImage.image, values.headerImage.opacity, values.headerImage.blendMode, setImageSettings]);
 
   return <DialRoot position="top-right" theme="system" />;
 }
