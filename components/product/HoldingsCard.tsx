@@ -30,7 +30,7 @@ export function HoldingsCard({ shares, limitPrice, value, change, changePositive
             <Icon name="arrowRight" size={16} color={colors.contentSecondary} />
           </View>
           <Text style={[textStyles.bodySmall, { color: colors.contentSecondary }]}>
-            Limit at price {limitPrice}
+            Avg price {limitPrice}
           </Text>
         </View>
         <View style={styles.right}>
