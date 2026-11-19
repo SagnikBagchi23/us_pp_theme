@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, PanResponder, type LayoutChangeEvent } from 'react-native';
+import { View, Text, StyleSheet, PanResponder, useWindowDimensions, type LayoutChangeEvent } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import type { SharedValue } from 'react-native-reanimated';
 import Animated, {
@@ -80,7 +80,9 @@ export function StockChart({
   const currentPriceRef = useRef(initialPrice);
   const fetchCacheRef = useRef<Map<Timeframe, number[]>>(new Map());
 
-  const [size, setSize] = useState({ w: 0, h: 0 });
+  const { height: viewportH } = useWindowDimensions();
+  const chartHeight = Math.round(viewportH * 0.37);
+  const [size, setSize] = useState({ w: 0, h: chartHeight });
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
   }, []);
@@ -114,7 +116,7 @@ export function StockChart({
   });
 
   const scale = size.w > 0 ? size.w / CHART_VIEWBOX_W : 1;
-  const scaledHeight = size.w > 0 ? CHART_VIEWBOX_H * scale : CHART_VIEWBOX_H;
+  const scaledHeight = chartHeight;
 
   const horizontalLineStyle = useAnimatedStyle(() => {
     const last = currentPoints.value[MORPH_N - 1];
