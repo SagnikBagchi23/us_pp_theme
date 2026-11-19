@@ -14,7 +14,7 @@
       "backgroundColor": "#060809"
     },
     "web": {
-      "favicon": "./assets/icon.png",
+      "favicon": "./assets/favicon-us-flag.png",
       "bundler": "metro"
     },
     "plugins": [

@@ -29,7 +29,7 @@ export function ProductAppBar({
   const borderStyle = useAnimatedStyle(() => ({ opacity: scrolled.value }));
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.backgroundPrimary }]}>
+    <View style={styles.container}>
       <Animated.View
         style={[StyleSheet.absoluteFill, styles.border, { borderBottomColor: colors.borderPrimary }, borderStyle]}
         pointerEvents="none"
