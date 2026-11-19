@@ -3,18 +3,18 @@ import { Text, TouchableOpacity, type StyleProp, type ViewStyle } from 'react-na
 
 // Codepoints from groww-huge-rounded font
 const ICONS: Record<string, string> = {
-  arrowUp:           '',
-  arrowDown:         '',
-  arrowLeft:         '',
-  arrowRight:        '',
-  arrowExpand:       '',
-  informationCircle: '',
-  close:             '',
-  moreVertical:      '',
-  unfoldMore:        '',
-  alarm:             '',
-  bookmark:          '',
-  search:            '',
+  arrowUp:           '', // arrow-up-01
+  arrowDown:         '', // arrow-down-01
+  arrowLeft:         '', // arrow-left-01
+  arrowRight:        '', // arrow-right-01
+  arrowExpand:       '', // mds_ic_huge_expand
+  informationCircle: '', // information-circle
+  close:             '', // cancel-01
+  moreVertical:      '', // more-vertical
+  unfoldMore:        '', // unfold-more
+  alarm:             '', // alarm-clock
+  bookmark:          '', // bookmark-02
+  search:            '', // mds_ic_huge_product_search
 };
 
 interface IconProps {

@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 const SCREEN_W = 393;
 const SCREEN_H = 852;
 const BEZEL = 2;
+const CORNER_RADIUS = 32;
 
 interface IPhoneMockupProps {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   frame: {
     width: SCREEN_W + BEZEL * 2,
     height: SCREEN_H + BEZEL * 2,
+    borderRadius: CORNER_RADIUS,
     backgroundColor: '#000',
   },
   screen: {
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
     left: BEZEL,
     width: SCREEN_W,
     height: SCREEN_H,
+    borderRadius: CORNER_RADIUS - BEZEL,
     overflow: 'hidden',
     backgroundColor: '#fff',
   },
