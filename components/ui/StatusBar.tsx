@@ -6,13 +6,16 @@ import { useTheme } from '@/constants/theme';
 
 interface StatusBarProps {
   scrolled: SharedValue<number>;
+  topInset: number;
 }
 
 // Simulated iPhone status bar content (time + signal/wifi/battery), matching the
 // phone-mockup chrome Figma ships alongside the app bar. `RNStatusBar` below still
 // controls the real OS status bar on native; this row is the visual stand-in used
 // inside the simulated phone frame (and on web, where there is no OS status bar).
-export function StatusBar({ scrolled: _scrolled }: StatusBarProps) {
+// It fills the full top safe-area inset itself (rather than sitting below a blank
+// padded gap) so the row lands flush against the top of the phone frame.
+export function StatusBar({ scrolled: _scrolled, topInset }: StatusBarProps) {
   const { colors, scheme } = useTheme();
 
   return (
@@ -22,7 +25,7 @@ export function StatusBar({ scrolled: _scrolled }: StatusBarProps) {
         translucent
         backgroundColor="transparent"
       />
-      <View style={styles.container}>
+      <View style={[styles.container, { height: Math.max(topInset, 44) }]}>
         <Text style={[styles.time, { color: colors.contentPrimary }]}>9:41</Text>
         <View style={styles.icons}>
           <Svg width={18.149} height={11} viewBox="0 0 18.1494 11">

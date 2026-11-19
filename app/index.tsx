@@ -215,7 +215,7 @@ export default function ProductScreen() {
   const headerRegionHeight = topInset + APP_BAR_HEIGHT + stockHeaderHeight + HEADER_PATTERN_FADE_BUFFER;
 
   const phoneContent = (
-    <View style={[styles.container, { backgroundColor: resolved.backgroundColor, paddingTop: topInset }]}>
+    <View style={[styles.container, { backgroundColor: resolved.backgroundColor }]}>
       {resolved.gradientEnabled && (
         <GradientOverlay
           heightPct={resolved.gradientHeightPct}
@@ -233,7 +233,7 @@ export default function ProductScreen() {
         />
       )}
 
-      <StatusBar scrolled={scrolled} />
+      <StatusBar scrolled={scrolled} topInset={topInset} />
 
       <ProductAppBar
         scrolled={scrolled}
