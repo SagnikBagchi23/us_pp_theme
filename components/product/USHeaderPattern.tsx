@@ -3,6 +3,10 @@ import { Image, Platform, StyleSheet, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Mask, Path, Pattern, Rect, Stop } from 'react-native-svg';
 import type { StarPatternSettings, USImageSettings } from '@/constants/theme';
 
+// Bundled US map dots image — shows as the default image layer for iteration 2.
+// Custom uploads from the picker override this automatically via image.uri.
+const US_MAP_DEFAULT = require('../../assets/us-map-dots.png');
+
 interface USHeaderPatternProps {
   height: number;
   pattern: StarPatternSettings;
@@ -18,8 +22,8 @@ export function USHeaderPattern({ height, pattern, image, tintColor }: USHeaderP
   if (height <= 0) return null;
 
   const showPattern = pattern.style === 'starGrid';
-  const showImage = !!image.uri;
-  if (!showPattern && !showImage) return null;
+  // Always show image layer — custom upload (image.uri) takes priority, bundled US map dots as default.
+  const imageSource = image.uri ? { uri: image.uri } : US_MAP_DEFAULT;
 
   const tileSize = 320 / pattern.density;
   const starScale = pattern.dotSize / 2;
@@ -63,13 +67,11 @@ export function USHeaderPattern({ height, pattern, image, tintColor }: USHeaderP
         </Svg>
       )}
 
-      {showImage && (
-        <Image
-          source={{ uri: image.uri! }}
-          resizeMode="cover"
-          style={[StyleSheet.absoluteFillObject, { opacity: image.opacity }, imageBlendStyle]}
-        />
-      )}
+      <Image
+        source={imageSource}
+        resizeMode="cover"
+        style={[StyleSheet.absoluteFillObject, { opacity: image.opacity }, imageBlendStyle]}
+      />
     </View>
   );
 }
