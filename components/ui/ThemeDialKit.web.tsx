@@ -1,14 +1,29 @@
 import React, { useEffect, useRef } from 'react';
 import { DialRoot, useDialKit } from 'dialkit';
 import 'dialkit/styles.css';
-import { useThemeOverride, useResolvedElementColors } from '@/constants/theme';
+import { useThemeOverride, useResolvedElementColors, useTheme } from '@/constants/theme';
 import { LOGO_CATALOG } from '@/assets/logoCatalog';
+import { DATA_VIZ_TOKEN_OPTIONS, getDataVizTokenHex, findDataVizTokenId } from '@/constants/dataVizTokens';
 
 const NO_LOGO = '__none__';
+const AUTO = '__auto__';
+const TOKEN_CHOICES = [
+  { value: AUTO, label: 'Auto' },
+  ...DATA_VIZ_TOKEN_OPTIONS.map((o) => ({ value: o.id, label: o.label })),
+];
+
+function tokenChoiceFor(hex: string | undefined, scheme: 'light' | 'dark'): string {
+  return (hex && findDataVizTokenId(hex, scheme)) || AUTO;
+}
+
+function tokenHexFor(choice: string, scheme: 'light' | 'dark'): string | undefined {
+  return choice === AUTO ? undefined : getDataVizTokenHex(choice, scheme);
+}
 
 export function ThemeDialKit() {
   const { state, setSelectedLogo, setManualOverride, setGradient, setUSTreatment, setPatternSettings, setImageSettings } =
     useThemeOverride();
+  const { scheme } = useTheme();
   // Panel preview rendering has no live price-direction context; resolves as "up" by default.
   const resolved = useResolvedElementColors(true);
 
@@ -29,15 +44,15 @@ export function ThemeDialKit() {
     },
     gradient: {
       enabled: state.gradient.enabled,
-      heightPct: [state.gradient.heightPct, 0, 40],
-      color: { type: 'color', default: initial.gradientColor },
+      heightPct: [state.gradient.heightPct, 0, 100],
+      color: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.gradientColor, scheme) },
     },
     colors: {
-      buy: { type: 'color', default: initial.buyColor },
-      sell: { type: 'color', default: initial.sellColor },
-      sipBorder: { type: 'color', default: initial.sipBorderColor },
-      chartPositive: { type: 'color', default: initial.chartPositiveColor },
-      chartNegative: { type: 'color', default: initial.chartNegativeColor },
+      buy: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.buyColor, scheme) },
+      sell: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.sellColor, scheme) },
+      sipBorder: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.sipBorderColor, scheme) },
+      chartPositive: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartPositiveColor, scheme) },
+      chartNegative: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartNegativeColor, scheme) },
     },
     usTreatment: {
       enabled: state.usTreatment.enabled,
@@ -49,7 +64,7 @@ export function ThemeDialKit() {
     },
     pattern: {
       style: { type: 'select', options: ['starGrid', 'none'], default: state.usTreatment.pattern.style },
-      opacity: [state.usTreatment.pattern.opacity, 0, 0.4, 0.01],
+      opacity: [state.usTreatment.pattern.opacity, 0, 1, 0.01],
       density: [state.usTreatment.pattern.density, 3, 12, 1],
       dotSize: [state.usTreatment.pattern.dotSize, 0.5, 4, 0.1],
       fadeHeightPct: [state.usTreatment.pattern.fadeHeightPct, 20, 100, 1],
@@ -81,16 +96,21 @@ export function ThemeDialKit() {
   ]);
 
   useEffect(() => {
-    setGradient({ enabled: values.gradient.enabled, heightPct: values.gradient.heightPct, color: values.gradient.color });
-  }, [values.gradient.enabled, values.gradient.heightPct, values.gradient.color, setGradient]);
+    setGradient({
+      enabled: values.gradient.enabled,
+      heightPct: values.gradient.heightPct,
+      color: tokenHexFor(values.gradient.color, scheme),
+    });
+  }, [values.gradient.enabled, values.gradient.heightPct, values.gradient.color, scheme, setGradient]);
 
   useEffect(() => {
-    setManualOverride('buyColor', values.colors.buy);
-    setManualOverride('sellColor', values.colors.sell);
-    setManualOverride('sipBorderColor', values.colors.sipBorder);
-    setManualOverride('chartPositiveColor', values.colors.chartPositive);
-    setManualOverride('chartNegativeColor', values.colors.chartNegative);
+    setManualOverride('buyColor', tokenHexFor(values.colors.buy, scheme));
+    setManualOverride('sellColor', tokenHexFor(values.colors.sell, scheme));
+    setManualOverride('sipBorderColor', tokenHexFor(values.colors.sipBorder, scheme));
+    setManualOverride('chartPositiveColor', tokenHexFor(values.colors.chartPositive, scheme));
+    setManualOverride('chartNegativeColor', tokenHexFor(values.colors.chartNegative, scheme));
   }, [
+    scheme,
     values.colors.buy,
     values.colors.sell,
     values.colors.sipBorder,

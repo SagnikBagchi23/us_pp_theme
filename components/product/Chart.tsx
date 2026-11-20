@@ -82,7 +82,7 @@ export function StockChart({
   const fetchCacheRef = useRef<Map<Timeframe, number[]>>(new Map());
 
   const { height: viewportH } = useWindowDimensions();
-  const chartHeight = Math.round(viewportH * 0.37) - TIMEFRAME_PILLS_HEIGHT;
+  const chartHeight = Math.round(viewportH * 0.485) - TIMEFRAME_PILLS_HEIGHT;
   const [size, setSize] = useState({ w: 0, h: chartHeight });
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });

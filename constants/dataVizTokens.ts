@@ -68,3 +68,57 @@ export const DATA_VIZ_FAMILIES: DataVizFamily[] = [
   'lilac', 'blue', 'skyBlue', 'mintGreen', 'oliveGreen',
   'yellow', 'orange', 'red', 'magenta', 'brown', 'grey',
 ];
+
+export type DataVizVariant = keyof DataVizTokenSet;
+
+const FAMILY_LABELS: Record<DataVizFamily, string> = {
+  lilac: 'Lilac',
+  blue: 'Blue',
+  skyBlue: 'Sky Blue',
+  mintGreen: 'Mint Green',
+  oliveGreen: 'Olive Green',
+  yellow: 'Yellow',
+  orange: 'Orange',
+  red: 'Red',
+  magenta: 'Magenta',
+  brown: 'Brown',
+  grey: 'Grey',
+};
+
+const VARIANT_LABELS: Record<DataVizVariant, string> = {
+  subtle: 'Subtle',
+  base: 'Base',
+  emphasis: 'Emphasis',
+};
+
+export interface DataVizTokenOption {
+  id: string;
+  label: string;
+  family: DataVizFamily;
+  variant: DataVizVariant;
+}
+
+export const DATA_VIZ_TOKEN_OPTIONS: DataVizTokenOption[] = DATA_VIZ_FAMILIES.flatMap((family) =>
+  (['subtle', 'base', 'emphasis'] as const).map((variant) => ({
+    id: `${family}.${variant}`,
+    label: `${FAMILY_LABELS[family]} · ${VARIANT_LABELS[variant]}`,
+    family,
+    variant,
+  })),
+);
+
+export function getDataVizTokenHex(id: string, scheme: 'light' | 'dark'): string | undefined {
+  const option = DATA_VIZ_TOKEN_OPTIONS.find((o) => o.id === id);
+  return option ? getDataVizTokens(option.family, scheme)[option.variant] : undefined;
+}
+
+export function findDataVizTokenId(hex: string, scheme: 'light' | 'dark'): string | undefined {
+  const target = hex.toUpperCase();
+  return DATA_VIZ_TOKEN_OPTIONS.find(
+    (o) => getDataVizTokens(o.family, scheme)[o.variant].toUpperCase() === target,
+  )?.id;
+}
+
+export function getDataVizTokenLabel(id: string): string | undefined {
+  return DATA_VIZ_TOKEN_OPTIONS.find((o) => o.id === id)?.label;
+}

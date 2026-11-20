@@ -114,7 +114,7 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
             label="Gradient height"
             value={state.gradient.heightPct}
             min={0}
-            max={40}
+            max={100}
             onChange={(v) => setGradient({ heightPct: v })}
           />
         </PanelSection>
@@ -150,7 +150,7 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
             label="Opacity"
             value={state.usTreatment.pattern.opacity * 100}
             min={0}
-            max={40}
+            max={100}
             onChange={(v) => setPatternSettings({ opacity: v / 100 })}
           />
           <PanelSlider

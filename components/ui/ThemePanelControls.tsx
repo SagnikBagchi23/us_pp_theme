@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Switch, StyleSheet, Image, Modal, Pressab
 import Slider from '@react-native-community/slider';
 import { useTheme } from '@/constants/theme';
 import { textStyles, spacing, radius } from '@/constants/tokens';
-import { dataVizLight, dataVizDark, DATA_VIZ_FAMILIES, type DataVizFamily } from '@/constants/dataVizTokens';
+import { DATA_VIZ_TOKEN_OPTIONS, getDataVizTokenHex } from '@/constants/dataVizTokens';
 import type { LogoEntry } from '@/assets/logoCatalog';
 
 export function PanelSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -214,11 +214,6 @@ export function PanelImagePicker({
   );
 }
 
-const PRESET_SWATCHES: { family: DataVizFamily; variant: 'base' | 'emphasis' }[] = DATA_VIZ_FAMILIES.flatMap((family) => [
-  { family, variant: 'base' as const },
-  { family, variant: 'emphasis' as const },
-]);
-
 export function PanelSwatchRow({
   label,
   color,
@@ -234,7 +229,6 @@ export function PanelSwatchRow({
 }) {
   const { colors, scheme } = useTheme();
   const [open, setOpen] = useState(false);
-  const table = scheme === 'dark' ? dataVizDark : dataVizLight;
 
   return (
     <>
@@ -262,18 +256,31 @@ export function PanelSwatchRow({
             <Text style={[textStyles.headingXSmall, { color: colors.contentPrimary }, styles.modalTitle]}>
               {label} color
             </Text>
-            <View style={styles.swatchGrid}>
-              {PRESET_SWATCHES.map(({ family, variant }) => {
-                const hex = table[family][variant];
+            <View style={styles.tokenList}>
+              {DATA_VIZ_TOKEN_OPTIONS.map((option) => {
+                const hex = getDataVizTokenHex(option.id, scheme)!;
                 return (
                   <TouchableOpacity
-                    key={`${family}-${variant}`}
-                    style={[styles.swatchOption, { backgroundColor: hex, borderColor: colors.borderPrimary }]}
+                    key={option.id}
+                    style={styles.tokenOption}
+                    activeOpacity={0.7}
                     onPress={() => { onPick(hex); setOpen(false); }}
-                  />
+                  >
+                    <View style={[styles.swatchOption, { backgroundColor: hex, borderColor: colors.borderPrimary }]} />
+                    <Text style={[textStyles.bodySmall, { color: colors.contentPrimary }]}>{option.label}</Text>
+                  </TouchableOpacity>
                 );
               })}
             </View>
+            {!isAuto && (
+              <TouchableOpacity
+                onPress={() => { onReset(); setOpen(false); }}
+                style={styles.tokenOption}
+                activeOpacity={0.7}
+              >
+                <Text style={[textStyles.bodySmallHeavy, { color: colors.contentAccent }]}>Reset to auto</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </Pressable>
       </Modal>
@@ -370,10 +377,14 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: radius.sm,
   },
-  swatchGrid: {
+  tokenList: {
+    gap: 2,
+  },
+  tokenOption: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
     gap: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   swatchOption: {
     width: 32,
