@@ -157,7 +157,7 @@ export function ThemePanel({ variant = 'inline' }: ThemePanelProps) {
             label="Density"
             value={state.usTreatment.pattern.density}
             min={3}
-            max={12}
+            max={30}
             onChange={(v) => setPatternSettings({ density: v })}
           />
           <PanelSlider

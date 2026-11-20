@@ -73,7 +73,7 @@ export function ThemeDialKit() {
     pattern: {
       style: { type: 'select', options: ['starGrid', 'none'], default: initialState.usTreatment.pattern.style },
       opacity: [initialState.usTreatment.pattern.opacity, 0, 1, 0.01],
-      density: [initialState.usTreatment.pattern.density, 3, 12, 1],
+      density: [initialState.usTreatment.pattern.density, 3, 30, 1],
       dotSize: [initialState.usTreatment.pattern.dotSize, 0.5, 4, 0.1],
       fadeHeightPct: [initialState.usTreatment.pattern.fadeHeightPct, 20, 100, 1],
     },
