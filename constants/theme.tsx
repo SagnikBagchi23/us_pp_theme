@@ -93,6 +93,7 @@ interface ThemeOverrideState {
   gradient: GradientSettings;
   usTreatment: USTreatmentSettings;
   iteration: IterationMode;
+  useLogoColors: boolean;
 }
 
 interface ThemeOverrideContextValue {
@@ -105,6 +106,7 @@ interface ThemeOverrideContextValue {
   setPatternSettings: (patch: Partial<StarPatternSettings>) => void;
   setImageSettings: (patch: Partial<USImageSettings>) => void;
   setIteration: (mode: IterationMode) => void;
+  setUseLogoColors: (value: boolean) => void;
   resetOverrides: () => void;
 }
 
@@ -121,6 +123,7 @@ const DEFAULT_STATE: ThemeOverrideState = {
   gradient: { enabled: true, heightPct: 20 },
   usTreatment: DEFAULT_US_TREATMENT,
   iteration: 'default',
+  useLogoColors: true,
 };
 
 const ThemeOverrideContext = createContext<ThemeOverrideContextValue>({
@@ -133,6 +136,7 @@ const ThemeOverrideContext = createContext<ThemeOverrideContextValue>({
   setPatternSettings: () => {},
   setImageSettings: () => {},
   setIteration: () => {},
+  setUseLogoColors: () => {},
   resetOverrides: () => {},
 });
 
@@ -183,6 +187,10 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
     setState((s) => ({ ...s, iteration: mode }));
   }, []);
 
+  const setUseLogoColors = useCallback((value: boolean) => {
+    setState((s) => ({ ...s, useLogoColors: value }));
+  }, []);
+
   const resetOverrides = useCallback(() => {
     setState((s) => ({
       ...s,
@@ -190,6 +198,7 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
       gradient: { enabled: true, heightPct: 20 },
       usTreatment: DEFAULT_US_TREATMENT,
       iteration: 'default',
+      useLogoColors: true,
     }));
   }, []);
 
@@ -204,6 +213,7 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
       setPatternSettings,
       setImageSettings,
       setIteration,
+      setUseLogoColors,
       resetOverrides,
     }),
     [
@@ -216,6 +226,7 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
       setPatternSettings,
       setImageSettings,
       setIteration,
+      setUseLogoColors,
       resetOverrides,
     ],
   );
@@ -253,11 +264,12 @@ export interface ResolvedElementColors {
 export function useResolvedElementColors(positive: boolean = true): ResolvedElementColors {
   const { colors, scheme } = useTheme();
   const { state, derivedFamily } = useThemeOverride();
-  const { manualOverrides, gradient, usTreatment, iteration } = state;
+  const { manualOverrides, gradient, usTreatment, iteration, useLogoColors } = state;
 
   const sentimentFamily: DataVizFamily = positive ? 'mintGreen' : 'red';
-  const activeFamily: DataVizFamily | null =
-    usTreatment.colorDriverMode === 'sentiment' ? sentimentFamily : derivedFamily;
+  // useLogoColors=false suppresses all logo-derived color derivation; elements fall back to base theme.
+  const activeFamily: DataVizFamily | null = !useLogoColors ? null :
+    (usTreatment.colorDriverMode === 'sentiment' ? sentimentFamily : derivedFamily);
 
   const derived = activeFamily ? getDataVizTokens(activeFamily, scheme) : null;
 

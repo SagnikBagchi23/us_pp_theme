@@ -1,42 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 import { DialRoot, useDialKit } from 'dialkit';
 import 'dialkit/styles.css';
-import { useThemeOverride, useResolvedElementColors, useTheme } from '@/constants/theme';
+import { useThemeOverride } from '@/constants/theme';
 import { LOGO_CATALOG } from '@/assets/logoCatalog';
-import { DATA_VIZ_TOKEN_OPTIONS, getDataVizTokenHex, findDataVizTokenId } from '@/constants/dataVizTokens';
 import type { PatternStyle } from '@/constants/theme';
 
 const NO_LOGO = '__none__';
-const AUTO = '__auto__';
-const TOKEN_CHOICES = [
-  { value: AUTO, label: 'Auto' },
-  ...DATA_VIZ_TOKEN_OPTIONS.map((o) => ({ value: o.id, label: o.label })),
-];
-
-function tokenChoiceFor(hex: string | undefined, scheme: 'light' | 'dark'): string {
-  return (hex && findDataVizTokenId(hex, scheme)) || AUTO;
-}
-
-function tokenHexFor(choice: string, scheme: 'light' | 'dark'): string | undefined {
-  return choice === AUTO ? undefined : getDataVizTokenHex(choice, scheme);
-}
 
 export function ThemeDialKit() {
-  const { state, setSelectedLogo, setManualOverride, setGradient, setUSTreatment, setPatternSettings, setImageSettings } = useThemeOverride();
-  const { scheme } = useTheme();
-  // Panel preview rendering has no live price-direction context; resolves as "up" by default.
-  const resolved = useResolvedElementColors(true);
-
-  // Captured once so dialkit's defaults reflect the current resolved colors
-  // without the panel resetting itself on every render.
-  const initial = useRef(resolved).current;
+  const {
+    state,
+    setSelectedLogo,
+    setGradient,
+    setUseLogoColors,
+    setUSTreatment,
+    setPatternSettings,
+    setImageSettings,
+  } = useThemeOverride();
 
   const initialState = useRef(state).current;
 
-  // Guard: skip the first effect fire for manual override effects. The panel initializes its
-  // controls from the current resolved state, so the first fire is always a no-op from the user's
-  // perspective — but it would immediately stamp manual overrides that block iteration-based
-  // color derivation. Only apply overrides after the user actually interacts.
+  // Skip the first effect fire: controls are initialized from current state, so the first fire
+  // is a no-op from the user's perspective but would stamp overrides blocking iteration colors.
   const initialized = useRef(false);
   useEffect(() => { initialized.current = true; }, []);
 
@@ -46,22 +31,12 @@ export function ThemeDialKit() {
       options: [{ value: NO_LOGO, label: 'None' }, ...LOGO_CATALOG.map((l) => ({ value: l.id, label: l.name }))],
       default: state.selectedLogoId ?? NO_LOGO,
     },
-    background: {
-      pageBackground: { type: 'color', default: initial.backgroundColor },
-      chartBackground: { type: 'color', default: initial.chartBackgroundColor },
-      desktopBackdrop: { type: 'color', default: initial.desktopBackdropColor },
-    },
     gradient: {
-      enabled: state.gradient.enabled,
-      heightPct: [state.gradient.heightPct, 0, 100],
-      color: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.gradientColor, scheme) },
+      enabled: initialState.gradient.enabled,
+      heightPct: [initialState.gradient.heightPct, 0, 100],
     },
     colors: {
-      buy: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.buyColor, scheme) },
-      sell: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.sellColor, scheme) },
-      sipBorder: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.sipBorderColor, scheme) },
-      chartPositive: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartPositiveColor, scheme) },
-      chartNegative: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartNegativeColor, scheme) },
+      fromLogo: initialState.useLogoColors,
     },
     usTreatment: {
       colorDriverMode: {
@@ -95,41 +70,13 @@ export function ThemeDialKit() {
 
   useEffect(() => {
     if (!initialized.current) return;
-    setManualOverride('backgroundColor', values.background.pageBackground);
-    setManualOverride('chartBackgroundColor', values.background.chartBackground);
-    setManualOverride('desktopBackdropColor', values.background.desktopBackdrop);
-  }, [
-    values.background.pageBackground,
-    values.background.chartBackground,
-    values.background.desktopBackdrop,
-    setManualOverride,
-  ]);
+    setGradient({ enabled: values.gradient.enabled, heightPct: values.gradient.heightPct, color: undefined });
+  }, [values.gradient.enabled, values.gradient.heightPct, setGradient]);
 
   useEffect(() => {
     if (!initialized.current) return;
-    setGradient({
-      enabled: values.gradient.enabled,
-      heightPct: values.gradient.heightPct,
-      color: tokenHexFor(values.gradient.color, scheme),
-    });
-  }, [values.gradient.enabled, values.gradient.heightPct, values.gradient.color, scheme, setGradient]);
-
-  useEffect(() => {
-    if (!initialized.current) return;
-    setManualOverride('buyColor', tokenHexFor(values.colors.buy, scheme));
-    setManualOverride('sellColor', tokenHexFor(values.colors.sell, scheme));
-    setManualOverride('sipBorderColor', tokenHexFor(values.colors.sipBorder, scheme));
-    setManualOverride('chartPositiveColor', tokenHexFor(values.colors.chartPositive, scheme));
-    setManualOverride('chartNegativeColor', tokenHexFor(values.colors.chartNegative, scheme));
-  }, [
-    scheme,
-    values.colors.buy,
-    values.colors.sell,
-    values.colors.sipBorder,
-    values.colors.chartPositive,
-    values.colors.chartNegative,
-    setManualOverride,
-  ]);
+    setUseLogoColors(values.colors.fromLogo);
+  }, [values.colors.fromLogo, setUseLogoColors]);
 
   useEffect(() => {
     setUSTreatment({ colorDriverMode: values.usTreatment.colorDriverMode as 'logo' | 'sentiment' });
