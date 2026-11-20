@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, PanResponder, useWindowDimensions, type LayoutChangeEvent } from 'react-native';
+import { View, Text, StyleSheet, PanResponder, type LayoutChangeEvent } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import type { SharedValue } from 'react-native-reanimated';
 import Animated, {
@@ -29,7 +29,6 @@ import {
 import { fmtInr, scrubTooltip } from '@/utils/format';
 import { IconButton } from '@/components/ui/IconButton';
 import SvgCanvas from './SvgCanvas';
-import { TIMEFRAME_PILLS_HEIGHT } from './TimeframePills';
 
 const YF_TF: Record<Timeframe, { interval: string; range: string }> = {
   '1D':  { interval: '5m',   range: '1d'  },
@@ -81,8 +80,7 @@ export function StockChart({
   const currentPriceRef = useRef(initialPrice);
   const fetchCacheRef = useRef<Map<Timeframe, number[]>>(new Map());
 
-  const { height: viewportH } = useWindowDimensions();
-  const chartHeight = Math.round(viewportH * 0.485) - TIMEFRAME_PILLS_HEIGHT;
+  const chartHeight = Math.round(800 * 0.37); // 296px — 37% of fixed 800px phone mockup
   const [size, setSize] = useState({ w: 0, h: chartHeight });
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
