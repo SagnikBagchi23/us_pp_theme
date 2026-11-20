@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useTheme } from '@/constants/theme';
 import { textStyles, spacing } from '@/constants/tokens';
-import { Icon } from '@/components/ui/Icon';
 import type { ImageSourcePropType, LayoutChangeEvent } from 'react-native';
 
 interface StockHeaderProps {
@@ -30,9 +29,6 @@ export function StockHeader({ ticker, name, price, change, changePositive, perio
       <View style={styles.nameLockup}>
         <View style={styles.tickerRow}>
           <Text style={[textStyles.bodySmall, { color: colors.contentSecondary }]}>{ticker}</Text>
-          <Text style={[textStyles.bodySmall, { color: colors.contentSecondary }]}> • </Text>
-          <Text style={[textStyles.bodySmall, { color: colors.contentSecondary }]}>NASDAQ</Text>
-          <Icon name="unfoldMore" size={12} color={colors.contentSecondary} />
         </View>
         <Text style={[textStyles.headingSmall, { color: colors.contentPrimary }]}>{name}</Text>
       </View>
