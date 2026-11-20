@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/Button';
 import { ThemePanel } from '@/components/ui/ThemePanel';
 import { ThemePanelFab } from '@/components/ui/ThemePanelFab';
 import { ThemeDialKit } from '@/components/ui/ThemeDialKit';
+import { IterationDialKit } from '@/components/ui/IterationDialKit';
 import { StockHeader } from '@/components/product/StockHeader';
 import { StockChart } from '@/components/product/Chart';
 import { TimeframePills } from '@/components/product/TimeframePills';
@@ -333,7 +334,14 @@ export default function ProductScreen() {
     return (
       <View style={[styles.desktopWrapper, { backgroundColor: resolved.desktopBackdropColor }]}>
         <View style={styles.desktopRow}>
-          {Platform.OS === 'web' ? <ThemeDialKit /> : <ThemePanel />}
+          {Platform.OS === 'web' ? (
+            <>
+              <ThemeDialKit />
+              <IterationDialKit />
+            </>
+          ) : (
+            <ThemePanel />
+          )}
           <IPhoneMockup>{phoneContent}</IPhoneMockup>
         </View>
       </View>

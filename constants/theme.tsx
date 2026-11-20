@@ -50,6 +50,7 @@ export interface GradientSettings {
 
 export type OverrideKey = keyof PerElementOverrides;
 
+export type IterationMode = 'default' | 'iteration1' | 'iteration2';
 export type ColorDriverMode = 'logo' | 'sentiment';
 export type PatternStyle = 'starGrid' | 'none';
 
@@ -91,6 +92,7 @@ interface ThemeOverrideState {
   manualOverrides: PerElementOverrides;
   gradient: GradientSettings;
   usTreatment: USTreatmentSettings;
+  iteration: IterationMode;
 }
 
 interface ThemeOverrideContextValue {
@@ -102,6 +104,7 @@ interface ThemeOverrideContextValue {
   setUSTreatment: (patch: Partial<Pick<USTreatmentSettings, 'enabled' | 'colorDriverMode'>>) => void;
   setPatternSettings: (patch: Partial<StarPatternSettings>) => void;
   setImageSettings: (patch: Partial<USImageSettings>) => void;
+  setIteration: (mode: IterationMode) => void;
   resetOverrides: () => void;
 }
 
@@ -117,6 +120,7 @@ const DEFAULT_STATE: ThemeOverrideState = {
   manualOverrides: {},
   gradient: { enabled: true, heightPct: 20 },
   usTreatment: DEFAULT_US_TREATMENT,
+  iteration: 'default',
 };
 
 const ThemeOverrideContext = createContext<ThemeOverrideContextValue>({
@@ -128,6 +132,7 @@ const ThemeOverrideContext = createContext<ThemeOverrideContextValue>({
   setUSTreatment: () => {},
   setPatternSettings: () => {},
   setImageSettings: () => {},
+  setIteration: () => {},
   resetOverrides: () => {},
 });
 
@@ -174,12 +179,17 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
     }));
   }, []);
 
+  const setIteration = useCallback((mode: IterationMode) => {
+    setState((s) => ({ ...s, iteration: mode }));
+  }, []);
+
   const resetOverrides = useCallback(() => {
     setState((s) => ({
       ...s,
       manualOverrides: {},
       gradient: { enabled: true, heightPct: 20 },
       usTreatment: DEFAULT_US_TREATMENT,
+      iteration: 'default',
     }));
   }, []);
 
@@ -193,6 +203,7 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
       setUSTreatment,
       setPatternSettings,
       setImageSettings,
+      setIteration,
       resetOverrides,
     }),
     [
@@ -204,6 +215,7 @@ export function ThemeOverrideProvider({ children }: { children: React.ReactNode 
       setUSTreatment,
       setPatternSettings,
       setImageSettings,
+      setIteration,
       resetOverrides,
     ],
   );
@@ -229,6 +241,9 @@ export interface ResolvedElementColors {
   gradientColor: string;
   gradientEnabled: boolean;
   gradientHeightPct: number;
+  chartGridColor: string;
+  ctaBackgroundColor: string;
+  ctaBorderColor: string;
 }
 
 // Resolution order per element: manual override -> derived family token -> base theme color.
@@ -238,7 +253,7 @@ export interface ResolvedElementColors {
 export function useResolvedElementColors(positive: boolean = true): ResolvedElementColors {
   const { colors, scheme } = useTheme();
   const { state, derivedFamily } = useThemeOverride();
-  const { manualOverrides, gradient, usTreatment } = state;
+  const { manualOverrides, gradient, usTreatment, iteration } = state;
 
   const sentimentFamily: DataVizFamily = positive ? 'mintGreen' : 'red';
   const activeFamily: DataVizFamily | null =
@@ -246,17 +261,26 @@ export function useResolvedElementColors(positive: boolean = true): ResolvedElem
 
   const derived = activeFamily ? getDataVizTokens(activeFamily, scheme) : null;
 
+  // Iteration 1 (Rainbow): page/chart bg = family subtle; CTA/chart line/grid = family base.
+  // Falls back to 'grey' family when no logo is selected or logo maps to a neutral fallback.
+  const iter1Active = iteration === 'iteration1';
+  const iter1Family: DataVizFamily = derivedFamily ?? 'grey';
+  const iter1 = iter1Active ? getDataVizTokens(iter1Family, scheme) : null;
+
   return {
-    buyColor: manualOverrides.buyColor ?? derived?.base ?? colors.contentPositive,
+    buyColor: manualOverrides.buyColor ?? (iter1?.base ?? derived?.base ?? colors.contentPositive),
     sellColor: manualOverrides.sellColor ?? colors.contentNegative,
-    sipBorderColor: manualOverrides.sipBorderColor ?? colors.borderPrimary,
-    chartPositiveColor: manualOverrides.chartPositiveColor ?? derived?.emphasis ?? colors.contentPositive,
+    sipBorderColor: manualOverrides.sipBorderColor ?? (iter1?.base ?? colors.borderPrimary),
+    chartPositiveColor: manualOverrides.chartPositiveColor ?? (iter1?.base ?? derived?.emphasis ?? colors.contentPositive),
     chartNegativeColor: manualOverrides.chartNegativeColor ?? colors.contentNegative,
-    backgroundColor: manualOverrides.backgroundColor ?? colors.backgroundPrimary,
-    chartBackgroundColor: manualOverrides.chartBackgroundColor ?? colors.backgroundPrimary,
+    backgroundColor: manualOverrides.backgroundColor ?? (iter1?.subtle ?? colors.backgroundPrimary),
+    chartBackgroundColor: manualOverrides.chartBackgroundColor ?? (iter1?.subtle ?? colors.backgroundPrimary),
     desktopBackdropColor: manualOverrides.desktopBackdropColor ?? DESKTOP_BACKDROP_DEFAULT,
     gradientColor: gradient.color ?? derived?.subtle ?? colors.backgroundSurfaceZ1,
     gradientEnabled: gradient.enabled,
     gradientHeightPct: gradient.heightPct,
+    chartGridColor: iter1?.base ?? colors.chartGrid,
+    ctaBackgroundColor: iter1?.subtle ?? colors.backgroundSurfaceZ1,
+    ctaBorderColor: iter1?.base ?? colors.borderPrimary,
   };
 }

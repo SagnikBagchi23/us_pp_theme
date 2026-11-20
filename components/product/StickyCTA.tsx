@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, type ViewStyle } from 'react-native';
-import { useTheme } from '@/constants/theme';
+import { useResolvedElementColors } from '@/constants/theme';
 
 interface StickyCTAProps {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ interface StickyCTAProps {
 }
 
 export function StickyCTA({ children, atBottom = false, noDivider = false, style }: StickyCTAProps) {
-  const { colors } = useTheme();
+  const resolved = useResolvedElementColors();
 
   const hasElevation = !atBottom;
-  const bg = hasElevation ? colors.backgroundSurfaceZ1 : 'transparent';
+  const bg = hasElevation ? resolved.ctaBackgroundColor : 'transparent';
   const showDivider = hasElevation && !noDivider;
 
   return (
@@ -25,7 +25,7 @@ export function StickyCTA({ children, atBottom = false, noDivider = false, style
         showDivider
           ? {
               borderTopWidth: StyleSheet.hairlineWidth,
-              borderTopColor: colors.borderPrimary,
+              borderTopColor: resolved.ctaBorderColor,
             }
           : null,
         style ?? null,

@@ -254,7 +254,7 @@ export function StockChart({
             scale={scale}
             scaledHeight={scaledHeight}
             positive={positive}
-            colors={{ contentPositive: resolved.chartPositiveColor, contentNegative: resolved.chartNegativeColor, chartGrid: colors.chartGrid }}
+            colors={{ contentPositive: resolved.chartPositiveColor, contentNegative: resolved.chartNegativeColor, chartGrid: resolved.chartGridColor }}
             showLtpLine={activeTf === '1D'}
           />
         )}

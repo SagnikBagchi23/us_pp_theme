@@ -21,8 +21,7 @@ function tokenHexFor(choice: string, scheme: 'light' | 'dark'): string | undefin
 }
 
 export function ThemeDialKit() {
-  const { state, setSelectedLogo, setManualOverride, setGradient, setUSTreatment, setPatternSettings, setImageSettings } =
-    useThemeOverride();
+  const { state, setSelectedLogo, setManualOverride, setGradient } = useThemeOverride();
   const { scheme } = useTheme();
   // Panel preview rendering has no live price-direction context; resolves as "up" by default.
   const resolved = useResolvedElementColors(true);
@@ -53,30 +52,6 @@ export function ThemeDialKit() {
       sipBorder: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.sipBorderColor, scheme) },
       chartPositive: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartPositiveColor, scheme) },
       chartNegative: { type: 'select', options: TOKEN_CHOICES, default: tokenChoiceFor(initial.chartNegativeColor, scheme) },
-    },
-    usTreatment: {
-      enabled: state.usTreatment.enabled,
-      colorDriverMode: {
-        type: 'select',
-        options: ['logo', 'sentiment'],
-        default: state.usTreatment.colorDriverMode,
-      },
-    },
-    pattern: {
-      style: { type: 'select', options: ['starGrid', 'none'], default: state.usTreatment.pattern.style },
-      opacity: [state.usTreatment.pattern.opacity, 0, 1, 0.01],
-      density: [state.usTreatment.pattern.density, 3, 12, 1],
-      dotSize: [state.usTreatment.pattern.dotSize, 0.5, 4, 0.1],
-      fadeHeightPct: [state.usTreatment.pattern.fadeHeightPct, 20, 100, 1],
-    },
-    headerImage: {
-      image: { type: 'image', default: state.usTreatment.image.uri ?? '' },
-      opacity: [state.usTreatment.image.opacity, 0, 1, 0.01],
-      blendMode: {
-        type: 'select',
-        options: ['normal', 'multiply', 'screen', 'overlay'],
-        default: state.usTreatment.image.blendMode,
-      },
     },
   });
 
@@ -119,37 +94,6 @@ export function ThemeDialKit() {
     setManualOverride,
   ]);
 
-  useEffect(() => {
-    setUSTreatment({
-      enabled: values.usTreatment.enabled,
-      colorDriverMode: values.usTreatment.colorDriverMode as 'logo' | 'sentiment',
-    });
-  }, [values.usTreatment.enabled, values.usTreatment.colorDriverMode, setUSTreatment]);
-
-  useEffect(() => {
-    setPatternSettings({
-      style: values.pattern.style as 'starGrid' | 'none',
-      opacity: values.pattern.opacity,
-      density: values.pattern.density,
-      dotSize: values.pattern.dotSize,
-      fadeHeightPct: values.pattern.fadeHeightPct,
-    });
-  }, [
-    values.pattern.style,
-    values.pattern.opacity,
-    values.pattern.density,
-    values.pattern.dotSize,
-    values.pattern.fadeHeightPct,
-    setPatternSettings,
-  ]);
-
-  useEffect(() => {
-    setImageSettings({
-      uri: values.headerImage.image || null,
-      opacity: values.headerImage.opacity,
-      blendMode: values.headerImage.blendMode as 'normal' | 'multiply' | 'screen' | 'overlay',
-    });
-  }, [values.headerImage.image, values.headerImage.opacity, values.headerImage.blendMode, setImageSettings]);
 
   // dialkit hides itself by default in production builds (NODE_ENV === 'production').
   // This app's whole purpose is a live-tunable theme preview, so force it on everywhere.
