@@ -33,6 +33,13 @@ export function ThemeDialKit() {
 
   const initialState = useRef(state).current;
 
+  // Guard: skip the first effect fire for manual override effects. The panel initializes its
+  // controls from the current resolved state, so the first fire is always a no-op from the user's
+  // perspective — but it would immediately stamp manual overrides that block iteration-based
+  // color derivation. Only apply overrides after the user actually interacts.
+  const initialized = useRef(false);
+  useEffect(() => { initialized.current = true; }, []);
+
   const values = useDialKit('Theme', {
     logo: {
       type: 'select',
@@ -82,10 +89,12 @@ export function ThemeDialKit() {
   });
 
   useEffect(() => {
+    if (!initialized.current) return;
     setSelectedLogo(values.logo === NO_LOGO ? null : values.logo);
   }, [values.logo, setSelectedLogo]);
 
   useEffect(() => {
+    if (!initialized.current) return;
     setManualOverride('backgroundColor', values.background.pageBackground);
     setManualOverride('chartBackgroundColor', values.background.chartBackground);
     setManualOverride('desktopBackdropColor', values.background.desktopBackdrop);
@@ -97,6 +106,7 @@ export function ThemeDialKit() {
   ]);
 
   useEffect(() => {
+    if (!initialized.current) return;
     setGradient({
       enabled: values.gradient.enabled,
       heightPct: values.gradient.heightPct,
@@ -105,6 +115,7 @@ export function ThemeDialKit() {
   }, [values.gradient.enabled, values.gradient.heightPct, values.gradient.color, scheme, setGradient]);
 
   useEffect(() => {
+    if (!initialized.current) return;
     setManualOverride('buyColor', tokenHexFor(values.colors.buy, scheme));
     setManualOverride('sellColor', tokenHexFor(values.colors.sell, scheme));
     setManualOverride('sipBorderColor', tokenHexFor(values.colors.sipBorder, scheme));

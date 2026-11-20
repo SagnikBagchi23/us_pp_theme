@@ -109,7 +109,7 @@ interface ThemeOverrideContextValue {
 }
 
 const DEFAULT_US_TREATMENT: USTreatmentSettings = {
-  enabled: true,
+  enabled: false,
   colorDriverMode: 'logo',
   pattern: { style: 'starGrid', opacity: 0.12, density: 6, dotSize: 1.5, fadeHeightPct: 60 },
   image: { uri: null, opacity: 0.5, blendMode: 'normal' },
