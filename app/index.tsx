@@ -230,7 +230,7 @@ export default function ProductScreen() {
           height={headerRegionHeight}
           pattern={state.usTreatment.pattern}
           image={state.usTreatment.image}
-          tintColor={resolved.gradientColor}
+          tintColor="#FFFFFF"
         />
       )}
 

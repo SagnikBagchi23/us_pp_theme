@@ -267,6 +267,11 @@ export function useResolvedElementColors(positive: boolean = true): ResolvedElem
   const iter1Family: DataVizFamily = derivedFamily ?? 'grey';
   const iter1 = iter1Active ? getDataVizTokens(iter1Family, scheme) : null;
 
+  // For iteration 1, the gradient uses the logo's dominant brand color (saturated primary)
+  // rather than the subtle dataviz token, giving a vivid logo-colored wash at the top.
+  const logoEntry = state.selectedLogoId ? LOGO_THEMES[state.selectedLogoId] : null;
+  const iter1GradientColor = iter1Active ? (logoEntry?.dominantHex ?? derived?.subtle) : undefined;
+
   return {
     buyColor: manualOverrides.buyColor ?? (iter1?.base ?? derived?.base ?? colors.contentPositive),
     sellColor: manualOverrides.sellColor ?? colors.contentNegative,
@@ -276,7 +281,7 @@ export function useResolvedElementColors(positive: boolean = true): ResolvedElem
     backgroundColor: manualOverrides.backgroundColor ?? (iter1?.subtle ?? colors.backgroundPrimary),
     chartBackgroundColor: manualOverrides.chartBackgroundColor ?? (iter1?.subtle ?? colors.backgroundPrimary),
     desktopBackdropColor: manualOverrides.desktopBackdropColor ?? DESKTOP_BACKDROP_DEFAULT,
-    gradientColor: gradient.color ?? derived?.subtle ?? colors.backgroundSurfaceZ1,
+    gradientColor: gradient.color ?? iter1GradientColor ?? derived?.subtle ?? colors.backgroundSurfaceZ1,
     gradientEnabled: gradient.enabled,
     gradientHeightPct: gradient.heightPct,
     chartGridColor: iter1?.base ?? colors.chartGrid,
