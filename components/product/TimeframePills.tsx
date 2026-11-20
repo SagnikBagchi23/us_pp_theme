@@ -6,6 +6,10 @@ import { useTheme } from '@/constants/theme';
 import { textStyles, motion, easing, radius } from '@/constants/tokens';
 import { TIMEFRAME_ORDER, type Timeframe } from '@/utils/chart';
 
+const PILL_HEIGHT = 24;
+const ROW_PADDING_V = 12;
+export const TIMEFRAME_PILLS_HEIGHT = PILL_HEIGHT + ROW_PADDING_V * 2;
+
 interface TimeframePillsProps {
   active: Timeframe;
   onChange: (tf: Timeframe) => void;
@@ -69,10 +73,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: ROW_PADDING_V,
   },
   pill: {
-    height: 24,
+    height: PILL_HEIGHT,
     paddingHorizontal: 8,
     borderRadius: radius.full,
     borderWidth: 1,

@@ -69,6 +69,7 @@ export function ProductAppBar({
 const styles = StyleSheet.create({
   container: {
     height: 56,
+    marginTop: -8,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.xs,

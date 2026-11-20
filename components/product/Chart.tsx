@@ -29,6 +29,7 @@ import {
 import { fmtInr, scrubTooltip } from '@/utils/format';
 import { IconButton } from '@/components/ui/IconButton';
 import SvgCanvas from './SvgCanvas';
+import { TIMEFRAME_PILLS_HEIGHT } from './TimeframePills';
 
 const YF_TF: Record<Timeframe, { interval: string; range: string }> = {
   '1D':  { interval: '5m',   range: '1d'  },
@@ -81,7 +82,7 @@ export function StockChart({
   const fetchCacheRef = useRef<Map<Timeframe, number[]>>(new Map());
 
   const { height: viewportH } = useWindowDimensions();
-  const chartHeight = Math.round(viewportH * 0.37);
+  const chartHeight = Math.round(viewportH * 0.37) - TIMEFRAME_PILLS_HEIGHT;
   const [size, setSize] = useState({ w: 0, h: chartHeight });
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
