@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Path, Svg, Circle } from 'react-native-svg';
+import { Path, Svg, Circle, Line } from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
   useSharedValue,
@@ -12,16 +12,18 @@ import { CHART_VIEWBOX_W, CHART_VIEWBOX_H, MORPH_N, type ChartPoint } from '@/ut
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedLine = Animated.createAnimatedComponent(Line);
 
 interface SvgCanvasProps {
   currentPoints: SharedValue<ChartPoint[]>;
   scale: number;
   scaledHeight: number;
   positive: boolean;
-  colors: { contentPositive: string; contentNegative: string };
+  colors: { contentPositive: string; contentNegative: string; chartGrid: string };
+  showLtpLine: boolean;
 }
 
-export default function SvgCanvas({ currentPoints, scale, scaledHeight, positive, colors }: SvgCanvasProps) {
+export default function SvgCanvas({ currentPoints, scale, scaledHeight, positive, colors, showLtpLine }: SvgCanvasProps) {
   const pulse = useSharedValue(0);
 
   useEffect(() => {
@@ -62,6 +64,12 @@ export default function SvgCanvas({ currentPoints, scale, scaledHeight, positive
     };
   });
 
+  const ltpLineProps = useAnimatedProps(() => {
+    'worklet';
+    const last = currentPoints.value[MORPH_N - 1];
+    return { y1: last.y, y2: last.y };
+  });
+
   const color = positive ? colors.contentPositive : colors.contentNegative;
 
   return (
@@ -70,6 +78,16 @@ export default function SvgCanvas({ currentPoints, scale, scaledHeight, positive
       height={scaledHeight}
       viewBox={`0 0 ${CHART_VIEWBOX_W} ${CHART_VIEWBOX_H}`}
     >
+      {showLtpLine && (
+        <AnimatedLine
+          animatedProps={ltpLineProps}
+          x1={0}
+          x2={CHART_VIEWBOX_W}
+          stroke={colors.chartGrid}
+          strokeWidth={0.5}
+          strokeDasharray="4 4"
+        />
+      )}
       <AnimatedPath
         animatedProps={pathProps}
         stroke={color}

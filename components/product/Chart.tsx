@@ -119,11 +119,6 @@ export function StockChart({
   const scale = size.w > 0 ? size.w / CHART_VIEWBOX_W : 1;
   const scaledHeight = chartHeight;
 
-  const horizontalLineStyle = useAnimatedStyle(() => {
-    const last = currentPoints.value[MORPH_N - 1];
-    return { transform: [{ translateY: last.y * scale }] };
-  });
-
   const tooltipStyle = useAnimatedStyle(() => {
     const w = tooltipW.value || 0;
     const pt = currentPoints.value[scrubIdx.value];
@@ -261,14 +256,8 @@ export function StockChart({
             scale={scale}
             scaledHeight={scaledHeight}
             positive={positive}
-            colors={{ contentPositive: resolved.chartPositiveColor, contentNegative: resolved.chartNegativeColor }}
-          />
-        )}
-
-        {activeTf === '1D' && (
-          <Animated.View
-            pointerEvents="none"
-            style={[styles.hline, { borderTopColor: colors.chartGrid }, horizontalLineStyle]}
+            colors={{ contentPositive: resolved.chartPositiveColor, contentNegative: resolved.chartNegativeColor, chartGrid: colors.chartGrid }}
+            showLtpLine={activeTf === '1D'}
           />
         )}
 
@@ -311,14 +300,6 @@ export function StockChart({
 const styles = StyleSheet.create({
   outer: { position: 'relative', overflow: 'visible' },
   clip: { overflow: 'hidden' },
-  hline: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    borderTopWidth: 1,
-    borderStyle: 'dashed',
-  },
   tooltip: {
     position: 'absolute',
     top: 8,
